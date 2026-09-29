@@ -1,0 +1,18 @@
+:root{
+    --purple-900:#3d2a7d;
+    --purple-700:#5b3fd6;
+    --purple-600:#6c4ee3;
+    --purple-100:#f1edfd;
+    --purple-50:#f8f6fe;
+    --ink:#241b45;
+    --gray-500:#7c7791;
+    --gray-300:#e4e1ee;
+    --gray-100:#f7f6fb;
+    --green-bg:#e5f7ec;
+    --green-fg:#1fa557;
+    --red-bg:#fdeaea;
+    --red-fg:#e2483d;
+    --white:#ffffff;
+    --radius:14px;
+    --shadow:0 8px 24px rgba(61,42,125,0.06);
+  }

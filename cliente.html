@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/cliente.css" />
+    <link rel="stylesheet" href="css/globals.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/compartido/supabaseClient.js"></script>
+    <script type="module" src="js/cliente.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item" href="mascotas.html">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item" href="planes.html">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item" href="historial.html">
+          <i data-lucide="clipboard-list"></i>
+          Registro/Historial
+        </a>
+        <a class="nav-item" href="usuarios.html">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <main>
+      <div class="page-header">
+        <div class="ctn-seccion">
+          <div class="ctn-icon-seccion">
+            <i class="icon-users-seccion" data-lucide="users"></i>
+          </div>
+          <div class="ctn-seccion-titulo">
+            <h1>Clientes</h1>
+            <p>Gestiona la información de tus clientes</p>
+          </div>
+        </div>
+        <div class="header-decoration" aria-hidden="true"></div>
+        <button class="btn-altaCliente">
+          <i data-lucide="user-round-plus"></i> Alta cliente
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            id="inputBuscador"
+            type="text"
+            placeholder="Ingresa DNI Nombre o Apellido."
+          />
+        </div>
+      </div>
+      <div class="vistaLista">
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>DNI</th>
+                <th>NOMBRE</th>
+                <th>APELLIDO</th>
+                <th>DIRECCIÓN</th>
+                <th>TELÉFONO</th>
+                <th>MAIL CLIENTE</th>
+                <th>ESTADO</th>
+                <th>FECHA ALTA</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="clientes-body">
+              <!-- filas generadas por JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="vistaEditar" style="display: none">
+        <div class="alta-header">
+          <button id="btnVolver" class="btn-back" title="Volver">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <div class="alta-header-titulo">
+            <h1 id="user-editar"></h1>
+            <p>Modificación de datos</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <form id="formAfiliado" class="form-right">
+            <div class="form-grid">
+              <div class="form-field" data-field="dni">
+                <div class="field-header">
+                  <label for="dni">DNI *</label>
+                  <span class="field-error" id="error-dni"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="id-card"></i></span>
+                  <input
+                    id="dni"
+                    name="dni"
+                    type="text"
+                    placeholder="Ingrese DNI"
+                    maxlength="8"
+                    inputmode="numeric"
+                    required
+                    tabindex="1"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="direccion">
+                <div class="field-header">
+                  <label for="direccion">Dirección *</label>
+                  <span class="field-error" id="error-direccion"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="map-pin"></i></span>
+                  <input
+                    id="direccion"
+                    name="direccion"
+                    type="text"
+                    placeholder="Ingrese dirección"
+                    required
+                    tabindex="2"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="nombre">
+                <div class="field-header">
+                  <label for="nombre">Nombre *</label>
+                  <span class="field-error" id="error-nombre"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="user"></i></span>
+                  <input
+                    id="nombre"
+                    name="nombre"
+                    type="text"
+                    placeholder="Ingrese nombre"
+                    required
+                    tabindex="3"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="telefono">
+                <div class="field-header">
+                  <label for="telefono">Teléfono *</label>
+                  <span class="field-error" id="error-telefono"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="phone"></i></span>
+                  <input
+                    id="telefono"
+                    name="telefono"
+                    type="text"
+                    placeholder="Ingrese teléfono"
+                    maxlength="20"
+                    inputmode="numeric"
+                    required
+                    tabindex="4"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="apellido">
+                <div class="field-header">
+                  <label for="apellido">Apellido *</label>
+                  <span class="field-error" id="error-apellido"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="user"></i></span>
+                  <input
+                    id="apellido"
+                    name="apellido"
+                    type="text"
+                    placeholder="Ingrese apellido"
+                    required
+                    tabindex="5"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="email">
+                <div class="field-header">
+                  <label for="email">Email *</label>
+                  <span class="field-error" id="error-email"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="mail"></i></span>
+                  <input
+                    id="email"
+                    name="email"
+                    type="text"
+                    placeholder="Ingrese email"
+                    required
+                    tabindex="6"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <div class="field-header">
+                  <label>Estado *</label>
+                </div>
+                <div class="conteiner-checkbox">
+                  <div class="checkbox-wrapper-13">
+                    <input
+                      id="estado-activo"
+                      type="radio"
+                      name="estado"
+                      value="Activo"
+                      checked
+                    />
+                    <label for="estado-activo">Activo</label>
+                  </div>
+                  <div class="checkbox-wrapper-13">
+                    <input
+                      id="estado-inactivo"
+                      type="radio"
+                      name="estado"
+                      value="Inactivo"
+                    />
+                    <label for="estado-inactivo">Inactivo</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="btn-confirmar" tabindex="7">
+                <i data-lucide="check"></i>
+                Confirmar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="vistaAltaCliente" id="vistaAltaCliente" style="display: none">
+        <div class="alta-header">
+          <button id="btnVolverAlta" class="btn-back" title="Volver">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <div class="alta-header-titulo">
+            <h1>Alta cliente</h1>
+            <p>Ingrese los datos del nuevo cliente.</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <form id="formAltaCliente" class="form-right">
+            <div class="form-grid">
+              <div class="form-field" data-field="dni-alta">
+                <div class="field-header">
+                  <label for="dni-alta">DNI *</label>
+                  <span class="field-error" id="error-dni-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="id-card"></i></span>
+                  <input
+                    id="dni-alta"
+                    name="dni-alta"
+                    type="text"
+                    placeholder="Ingrese DNI"
+                    maxlength="8"
+                    inputmode="numeric"
+                    required
+                    tabindex="1"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="nombre-alta">
+                <div class="field-header">
+                  <label for="nombre-alta">Nombre *</label>
+                  <span class="field-error" id="error-nombre-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="user"></i></span>
+                  <input
+                    id="nombre-alta"
+                    name="nombre-alta"
+                    type="text"
+                    placeholder="Ingrese nombre"
+                    required
+                    tabindex="2"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="apellido-alta">
+                <div class="field-header">
+                  <label for="apellido-alta">Apellido *</label>
+                  <span class="field-error" id="error-apellido-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="user"></i></span>
+                  <input
+                    id="apellido-alta"
+                    name="apellido-alta"
+                    type="text"
+                    placeholder="Ingrese apellido"
+                    required
+                    tabindex="3"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="direccion-alta">
+                <div class="field-header">
+                  <label for="direccion-alta">Dirección *</label>
+                  <span class="field-error" id="error-direccion-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="map-pin"></i></span>
+                  <input
+                    id="direccion-alta"
+                    name="direccion-alta"
+                    type="text"
+                    placeholder="Ingrese dirección"
+                    required
+                    tabindex="4"
+                  />
+                </div>
+              </div>
+              <div class="form-field" data-field="telefono-alta">
+                <div class="field-header">
+                  <label for="telefono-alta">Teléfono *</label>
+                  <span class="field-error" id="error-telefono-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="phone"></i></span>
+                  <input
+                    id="telefono-alta"
+                    name="telefono-alta"
+                    type="text"
+                    placeholder="Ingrese teléfono"
+                    maxlength="20"
+                    inputmode="numeric"
+                    required
+                    tabindex="5"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field" data-field="email-alta">
+                <div class="field-header">
+                  <label for="email-alta">Email *</label>
+                  <span class="field-error" id="error-email-alta"></span>
+                </div>
+                <div class="input-wrap">
+                  <span class="input-icon"><i data-lucide="mail"></i></span>
+                  <input
+                    id="email-alta"
+                    name="email-alta"
+                    type="text"
+                    placeholder="Ingrese email"
+                    required
+                    tabindex="6"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="btn-confirmar-alta" tabindex="7">
+                <i data-lucide="check"></i>
+                Confirmar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="vistaVerMascotas" id="vistaVerMascotas" style="display: none">
+        <div class="alta-header">
+          <button id="btnVolverMascotas" class="btn-back" title="Volver">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <div class="alta-header-titulo">
+            <h1 id="user-mascotas"></h1>
+            <p>Listado de mascotas</p>
+          </div>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>NOMBRE</th>
+                <th>ESPECIE</th>
+                <th>RAZA</th>
+                <th>OBSERVACIONES</th>
+                <th>PLANES</th>
+              </tr>
+            </thead>
+            <tbody id="mascotas-body">
+              <!-- filas generadas por JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div id="confirm-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>¿Eliminar cliente?</h3>
+        <p id="confirm-text">
+          ¿Seguro que querés eliminar este cliente? Esta acción no se puede
+          deshacer.
+        </p>
+        <div class="modal-actions">
+          <button id="confirm-cancel" class="btn-secondary">Cancelar</button>
+          <button id="confirm-delete" class="btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+# Dependencias / build (por si se agrega tooling despues)
+node_modules/
+dist/
+build/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# Archivo de prueba de conexion local (no subir)
+testConeccion.html
+
+# Credenciales de Supabase (no subir el archivo real)
+js/compartido/supabaseClient.js

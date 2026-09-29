@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro / Historial</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="css/historial.css" />
+    <link rel="stylesheet" href="css/globals.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/compartido/supabaseClient.js"></script>
+    <script src="js/historial.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="cliente.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item" href="mascotas.html">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item" href="planes.html">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="clipboard-list"></i>
+          Registro/Historial
+        </a>
+        <a class="nav-item" href="usuarios.html">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <div class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </div>
+    </aside>
+
+    <main>
+      <div class="page-header">
+        <div class="ctn-seccion">
+          <div class="ctn-icon-seccion">
+            <i class="icon-users-seccion" data-lucide="clipboard-pen-line"></i>
+          </div>
+          <div class="ctn-seccion-titulo">
+            <h1>Registro / Historial</h1>
+            <p>Consulta y administración de registros</p>
+          </div>
+        </div>
+        <div class="header-decoration" aria-hidden="true"></div>
+        <div class="header-illustration">
+          <img src="public/img/PNGdogandcat.png" alt="Perro y gato" />
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters-bar">
+          <div class="search-box search-box--date">
+            <span class="search-icon"><i data-lucide="calendar"></i></span>
+            <input
+              id="inputFecha"
+              type="text"
+              inputmode="numeric"
+              maxlength="10"
+              placeholder="Buscar por fecha (aaaa-mm-dd)"
+              autocomplete="off"
+            />
+            <button id="btnAbrirCalendario" type="button" class="btn-calendar-pick" title="Elegir fecha en el calendario">
+              <i data-lucide="calendar-days"></i>
+            </button>
+            <input id="inputFechaNativo" type="date" class="input-fecha-oculto" tabindex="-1" aria-hidden="true" />
+          </div>
+          <div class="search-box">
+            <span class="search-icon"><i data-lucide="search"></i></span>
+            <input
+              id="inputDni"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="9"
+              placeholder="Buscar por DNI"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-box">
+            <span class="search-icon"><i data-lucide="search"></i></span>
+            <input id="inputPlanes" type="text" placeholder="Buscar por concepto / plan" autocomplete="off" />
+          </div>
+          <div class="search-box search-box--clear">
+            <button id="btnLimpiarFiltros" class="btn-clear-filtros" type="button" title="Limpiar filtros">
+              <i data-lucide="x-circle"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vistaLista">
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>DNI</th>
+                  <th>TIPO</th>
+                  <th>PLAN</th>
+                  <th>FECHA</th>
+                  <th>HORA</th>
+                  <th>CONCEPTO</th>
+                  <th>MÉTODO PAGO</th>
+                  <th>ESTADO</th>
+                  <th>OBSERVACIONES</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody id="historial-body">
+                <!-- filas generadas por JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <p id="info-paginacion">Mostrando 0 a 0 de 0 registros</p>
+            <div class="pagination-buttons" id="paginacion-botones">
+              <button id="btnFirst" title="Primera">&laquo;</button>
+              <button id="btnPrev" title="Anterior">&lsaquo;</button>
+              <span id="paginacion-numeros"></span>
+              <button id="btnNext" title="Siguiente">&rsaquo;</button>
+              <button id="btnLast" title="Última">&raquo;</button>
+            </div>
+            <select id="selectCantidad" name="select-cantidad-registros">
+              <option value="10">10 por página</option>
+              <option value="20" selected>20 por página</option>
+              <option value="50">50 por página</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="confirm-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>¿Eliminar registro?</h3>
+        <p id="confirm-text">¿Seguro que querés eliminar este registro? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+          <button id="confirm-cancel" class="btn-secondary">Cancelar</button>
+          <button id="confirm-delete" class="btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="detalle-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>Detalle del registro</h3>
+        <p id="detalle-text"></p>
+        <div class="modal-actions">
+          <button id="detalle-cerrar" class="btn-secondary">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="editar-overlay" class="overlay hidden">
+      <div class="modal modal-editar">
+        <h3>Editar registro</h3>
+        <div class="form-grid">
+          <label class="form-field">
+            <span>DNI</span>
+            <input id="editDni" type="text" disabled />
+          </label>
+          <label class="form-field">
+            <span>Estado</span>
+            <select id="editEstado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="Completado">Completado</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </label>
+          <label class="form-field">
+            <span>Tipo</span>
+            <input id="editTipo" type="text" placeholder="Pago, Contrato, Alta, Baja..." />
+          </label>
+          <label class="form-field">
+            <span>Plan</span>
+            <input id="editPlan" type="text" placeholder="Plan de la mascota" />
+          </label>
+          <label class="form-field">
+            <span>Fecha (aaaa-mm-dd)</span>
+            <input id="editFecha" type="text" inputmode="numeric" maxlength="10" placeholder="aaaa-mm-dd" />
+          </label>
+          <label class="form-field">
+            <span>Hora</span>
+            <input id="editHora" type="text" placeholder="hh:mm" />
+          </label>
+          <label class="form-field form-field--full">
+            <span>Método de pago</span>
+            <input id="editMetodo" type="text" placeholder="Efectivo, transferencia, cuota mensual..." />
+          </label>
+          <label class="form-field form-field--full">
+            <span>Concepto</span>
+            <input id="editConcepto" type="text" placeholder="Detalle del registro" />
+          </label>
+          <label class="form-field form-field--full">
+            <span>Observaciones</span>
+            <textarea id="editObservaciones" rows="3"></textarea>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button id="editar-cancelar" class="btn-secondary" type="button">Cancelar</button>
+          <button id="editar-guardar" class="btn-primary" type="button">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
