@@ -15,6 +15,7 @@
   <!-- Supabase & JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/compartido/supabaseClient.js"></script>
+  <script src="js/compartido/sesion.js"></script>
   <script type="module" src="js/usuarios.js"></script>
 </head>
 <body>
@@ -98,7 +99,7 @@
           <h3>Crear usuario ADM</h3>
         </div>
 
-        <form id="createAdminForm">
+        <form id="createAdminForm" data-rol="admin">
           <div class="form-group">
             <label for="usernameInput">Usuario</label>
             <div class="input-icon-wrapper">
@@ -155,21 +156,21 @@
                 <td>juan123</td>
                 <td>Administrador</td>
                 <td><span class="badge active">Activo</span></td>
-                <td><button class="btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button></td>
+                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>maria456</td>
                 <td>Veterinario</td>
                 <td><span class="badge active">Activo</span></td>
-                <td><button class="btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button></td>
+                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
               </tr>
               <tr>
                 <td>3</td>
                 <td>carlos789</td>
                 <td>Usuario</td>
                 <td><span class="badge inactive">Inactivo</span></td>
-                <td><button class="btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button></td>
+                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
               </tr>
             </tbody>
           </table>

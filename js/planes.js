@@ -24,6 +24,10 @@ async function cargarDatos() {
     BENEFICIOS = beneficios;
 }
 
+function formatearCosto(costo) {
+    return '$' + Number(costo || 0).toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
 function nombresDeBeneficios() {
     return [...new Set(BENEFICIOS.map(b => b.nombre_beneficio))];
 }
@@ -39,10 +43,12 @@ function renderPlanes() {
     cont.innerHTML = PLANES.map(plan => `
         <div class="plan-card">
             <div class="plan-card-header">
-                <div class="plan-card-icono"><i data-lucide="${iconoDePlan(plan.nombre_plan)}"></i></div>
-                <strong>${plan.nombre_plan}</strong>
+                <div class="plan-card-icono"><i data-lucide="${iconoDePlan(plan)}"></i></div>
+                <div>
+                    <strong>${plan.nombre_plan}</strong>
+                    <div class="plan-card-costo">${formatearCosto(plan.costo)}</div>
+                </div>
             </div>
-            <div class="plan-precio">$ ${Number(plan.costo ?? 0).toLocaleString('es-AR')}</div>
             ${beneficios.map(b => `
                 <div class="beneficio-fila">
                     <span class="beneficio-nombre"><i data-lucide="${iconoDeBeneficio(b)}" class="beneficio-icono"></i>${b}</span>
@@ -60,12 +66,14 @@ function renderPlanes() {
 function filaBeneficioHTML(nombreOriginal, nombreValor) {
     return `
         <tr class="fila-beneficio" data-original="${nombreOriginal}">
-            <td style="display:flex; align-items:center;">
-                <input class="nombre-editable input-nombre-beneficio" value="${nombreValor}" placeholder="Nombre del beneficio">
-                <select class="selector-icono-inline selector-icono-beneficio">
-                    ${ICONOS_DISPONIBLES.map(i => `<option value="${i}" ${iconoDeBeneficio(nombreValor) === i ? 'selected' : ''}>${etiquetaIcono(i)}</option>`).join('')}
-                </select>
-                <button type="button" class="btn-borrar-beneficio" title="Borrar beneficio"><i data-lucide="trash-2"></i></button>
+            <td>
+                <div class="celda-beneficio">
+                    <input class="nombre-editable input-nombre-beneficio" value="${nombreValor}" placeholder="Nombre del beneficio">
+                    <select class="selector-icono-inline selector-icono-beneficio">
+                        ${ICONOS_DISPONIBLES.map(i => `<option value="${i}" ${iconoDeBeneficio(nombreValor) === i ? 'selected' : ''}>${etiquetaIcono(i)}</option>`).join('')}
+                    </select>
+                    <button type="button" class="btn-borrar-beneficio" data-rol="admin,recepcionista" title="Borrar beneficio"><i data-lucide="trash-2"></i></button>
+                </div>
             </td>
             ${PLANES.map(p => `
                 <td>
@@ -84,15 +92,25 @@ function renderEditar() {
 
     head.innerHTML = '<th>Beneficios</th>' + PLANES.map(p => `
         <th>
-            <div style="display:flex; align-items:center; gap:4px;">
-                <input class="nombre-editable input-nombre-plan" data-original="${p.nombre_plan}" value="${p.nombre_plan}">
-                <button type="button" class="btn-borrar-plan" data-plan="${p.nombre_plan}" title="Borrar plan"><i data-lucide="trash-2"></i></button>
+            <div class="plan-editar">
+                <div class="plan-editar-fila">
+                    <input class="nombre-editable input-nombre-plan" data-original="${p.nombre_plan}" value="${p.nombre_plan}" placeholder="Nombre del plan">
+                    <button type="button" class="btn-borrar-plan" data-rol="admin,recepcionista" data-plan="${p.nombre_plan}" title="Borrar plan"><i data-lucide="trash-2"></i></button>
+                </div>
+                <select class="selector-icono-inline selector-icono-plan" data-original="${p.nombre_plan}">
+                    ${ICONOS_DISPONIBLES.map(i => `<option value="${i}" ${iconoDePlan(p) === i ? 'selected' : ''}>${etiquetaIcono(i)}</option>`).join('')}
+                </select>
+                <div class="costo-editable-wrap">
+                    <span>$</span>
+                    <input type="number" min="0" step="0.01" class="nombre-editable input-costo-plan" data-original="${p.nombre_plan}" value="${p.costo ?? 0}" placeholder="Costo">
+                </div>
             </div>
         </th>
     `).join('');
 
     body.innerHTML = beneficios.map(b => filaBeneficioHTML(b, b)).join('');
     lucide.createIcons();
+    reaplicarPermisos();
 }
 
 function agregarFilaBeneficio() {
@@ -101,6 +119,7 @@ function agregarFilaBeneficio() {
     const inputs = body.querySelectorAll('.input-nombre-beneficio');
     inputs[inputs.length - 1].focus();
     lucide.createIcons();
+    reaplicarPermisos();
 }
 
 function confirmarModal(mensaje) {
@@ -147,11 +166,21 @@ async function borrarBeneficio(nombreBeneficio) {
 
 async function guardarEdicion() {
     // 1. Renombrar planes que hayan cambiado
+    // (también se guarda el costo de cada plan)
     for (const input of document.querySelectorAll('.input-nombre-plan')) {
         const original = input.dataset.original;
         const nuevo = input.value.trim();
-        if (nuevo && nuevo !== original) {
-            await window.supabaseClient.from('planes').update({ nombre_plan: nuevo }).eq('nombre_plan', original);
+        const inputCosto = document.querySelector(`.input-costo-plan[data-original="${original}"]`);
+        const costo = Math.max(0, parseFloat(inputCosto.value) || 0);
+
+        const inputIcono = document.querySelector(`.selector-icono-plan[data-original="${original}"]`);
+        const cambios = { costo, icono: inputIcono.value };
+        if (nuevo && nuevo !== original) cambios.nombre_plan = nuevo;
+
+        const { error } = await window.supabaseClient.from('planes').update(cambios).eq('nombre_plan', original);
+        if (error) {
+            console.error(error);
+            alert(`No se pudo guardar el plan "${original}"`);
         }
     }
 
@@ -209,10 +238,9 @@ function renderListaBeneficiosCrear() {
     const cont = document.getElementById('lista-beneficios-crear');
     const beneficios = nombresDeBeneficios();
     cont.innerHTML = beneficios.map(b => `
-        <div class="beneficio-check-fila">
-            <span class="beneficio-nombre"><i data-lucide="${iconoDeBeneficio(b)}" class="beneficio-icono"></i>${b}</span>
-            <input type="checkbox" class="check-nuevo-beneficio" data-beneficio="${b}">
-        </div>
+        <label class="beneficio-check-fila">
+            <span class="beneficio-nombre"><input type="checkbox" class="check-nuevo-beneficio" data-beneficio="${b}"><i data-lucide="${iconoDeBeneficio(b)}" class="beneficio-icono"></i>${b}</span>
+        </label>
     `).join('');
     lucide.createIcons();
 }
@@ -220,31 +248,24 @@ function renderListaBeneficiosCrear() {
 async function crearPlan() {
     const nombre = document.getElementById('input-nombre-plan').value.trim();
     const descripcion = document.getElementById('input-descripcion-plan').value.trim();
-    const precioRaw = document.getElementById('input-precio-plan').value;
-    const precio = parseFloat(precioRaw);
+    const costo = Math.max(0, parseFloat(document.getElementById('input-costo-plan').value) || 0);
 
     if (!nombre) {
         alert('Poné un nombre para el plan');
         return;
     }
 
-    if (precioRaw === '' || isNaN(precio) || precio < 0) {
-        alert('Ingresá un precio válido para el plan');
-        return;
-    }
-
     const { error: errorPlan } = await window.supabaseClient.from('planes').insert({
         nombre_plan: nombre,
-        costo: precio,
-        descripcion
+        costo,
+        descripcion,
+        icono: iconoPlanSeleccionado
     });
     if (errorPlan) {
         console.error(errorPlan);
         alert('No se pudo crear el plan (¿ya existe ese nombre?)');
         return;
     }
-
-    guardarIconoPlan(nombre, iconoPlanSeleccionado);
 
     const seleccionados = [...document.querySelectorAll('.check-nuevo-beneficio:checked')]
         .map(chk => ({ nombre_plan: nombre, nombre_beneficio: chk.dataset.beneficio, cantidad: 1, periodo: 'mensual' }));
@@ -292,7 +313,7 @@ document.getElementById('btn-crear-plan').addEventListener('click', () => {
     iconoPlanSeleccionado = 'paw-print';
     document.getElementById('input-nombre-plan').value = '';
     document.getElementById('input-descripcion-plan').value = '';
-    document.getElementById('input-precio-plan').value = '';
+    document.getElementById('input-costo-plan').value = '';
     renderSelectorIconosPlan();
     renderListaBeneficiosCrear();
     mostrarVista(vistaCrear);
@@ -305,6 +326,7 @@ document.getElementById('btn-volver-crear').addEventListener('click', () => {
 document.getElementById('btn-agregar-plan').addEventListener('click', crearPlan);
 
 (async () => {
+    if (!(await protegerRuta())) return;
     await cargarDatos();
     renderPlanes();
 })();
@@ -317,8 +339,7 @@ function configurarLogout() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('supabase.auth.token');
-            window.location.href = 'index.html';
+            cerrarSesion();
         });
     }
 }

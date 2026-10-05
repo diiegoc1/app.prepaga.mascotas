@@ -24,30 +24,46 @@ const modalaviso = document.getElementById('modal-aviso');
 const btnX = document.getElementById('btn-x');
 const blackout = document.getElementById('blackout');
 
+function mostrarAviso() {
+    modalaviso.classList.remove('oculto');
+    blackout.classList.remove('oculto');
+    modalaviso.style.display = 'flex';
+    blackout.style.display = 'flex';
+}
+
 btnIngresar.addEventListener('click', async ()=>{
-    const usuario = inputUsuario.value.trim();
+    const email = inputUsuario.value.trim();
     const contraseña = inputContraseña.value.trim();
 
-    if (!usuario || !contraseña) return;
+    if (!email || !contraseña) return;
 
     btnIngresar.disabled = true;
 
-    const { data, error } = await window.supabaseClient.rpc('login_empleado', {
-        p_nombre_empleado: usuario,
-        p_password: contraseña
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+        email,
+        password: contraseña
     });
 
     btnIngresar.disabled = false;
 
-    if (!error && data && data.length > 0) {
-        sessionStorage.setItem('empleado', JSON.stringify(data[0]));
-        window.location.href = 'dashboard.html';
-    } else {
-        modalaviso.classList.remove('oculto');
-        blackout.classList.remove('oculto');
-        modalaviso.style.display = 'flex';
-        blackout.style.display = 'flex';
+    if (error || !data.session) {
+        mostrarAviso();
+        return;
     }
+
+    const perfil = await getEmpleadoActual();
+    if (!perfil || !esActivo(perfil)) {
+        await window.supabaseClient.auth.signOut();
+        mostrarAviso();
+        return;
+    }
+
+    sessionStorage.setItem('empleado', JSON.stringify({
+        id_empleado: perfil.id_empleado,
+        nombre: perfil.nombre,
+        rol: perfil.rol
+    }));
+    window.location.href = 'dashboard.html';
 });
 
 btnX.addEventListener('click', ()=>{

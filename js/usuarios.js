@@ -75,7 +75,7 @@ function renderTablaUsuarios() {
                     </span>
                 </td>
                 <td>
-                    <button class="btn-delete" title="Eliminar usuario" data-id="${u.id_empleado}">
+                    <button class="btn-delete" title="Eliminar usuario" data-id="${u.id_empleado}" data-rol="admin">
                         <i data-lucide="trash-2"></i>
                     </button>
                 </td>
@@ -87,6 +87,7 @@ function renderTablaUsuarios() {
     if (window.lucide) {
         lucide.createIcons();
     }
+    reaplicarPermisos();
 }
 
 // ==========================================
@@ -226,8 +227,7 @@ function configurarLogout() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('supabase.auth.token');
-            window.location.href = 'index.html';
+            cerrarSesion();
         });
     }
 }
@@ -236,5 +236,6 @@ configurarLogout();
 // Inicializar ejecución al cargar la página
 (async () => {
     inicializarTema();
+    if (!(await protegerRuta({ soloAdminRecep: true }))) return;
     await cargarUsuarios();
 })();

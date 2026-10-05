@@ -49,18 +49,12 @@ function guardarIconoBeneficio(nombre, icono) {
     localStorage.setItem('iconos_beneficios', JSON.stringify(g));
 }
 
-function guardarIconoPlan(nombre, icono) {
-    const g = _obtenerGuardados('iconos_planes');
-    g[nombre] = icono;
-    localStorage.setItem('iconos_planes', JSON.stringify(g));
-}
-
 function iconoDeBeneficio(nombre) {
     const g = _obtenerGuardados('iconos_beneficios');
     return g[nombre] || ICONOS_BENEFICIO_DEFAULT[nombre] || 'circle';
 }
 
-function iconoDePlan(nombre) {
-    const g = _obtenerGuardados('iconos_planes');
-    return g[nombre] || ICONOS_PLAN_DEFAULT[nombre] || 'paw-print';
+// El ícono del plan viene de la columna `icono` de la tabla `planes` en Supabase
+function iconoDePlan(plan) {
+    return (plan && plan.icono) || ICONOS_PLAN_DEFAULT[plan && plan.nombre_plan] || 'paw-print';
 }

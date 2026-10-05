@@ -17,6 +17,7 @@
   
   <!-- JS -->
   <script src="js/compartido/supabaseClient.js"></script>
+  <script src="js/compartido/sesion.js"></script>
   <script type="module" src="js/mascotas.js"></script>
 </head>
 <body>
@@ -51,11 +52,11 @@
         <i data-lucide="clipboard-list"></i>
         Registro/Historial
       </a>
-      <a class="nav-item" href="usuarios.html">
+      <a class="nav-item" href="usuarios.html" data-rol="admin,recepcionista">
         <i data-lucide="user-round"></i>
         Usuarios
       </a>
-      <a class="nav-item" href="configuracion.html">
+      <a class="nav-item" href="configuracion.html" data-rol="admin,recepcionista">
         <i data-lucide="settings"></i>
         Configuración
       </a>
@@ -82,7 +83,7 @@
             <p>Gestión de pacientes veterinarios</p>
           </div>
         </div>
-        <button class="btn-alta" id="btnAltaMascota">
+        <button class="btn-alta" id="btnAltaMascota" data-rol="admin,recepcionista">
           <i data-lucide="plus"></i>
           Alta Mascota
         </button>

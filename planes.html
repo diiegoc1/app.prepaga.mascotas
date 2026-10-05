@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/globals.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/compartido/supabaseClient.js"></script>
+    <script src="js/compartido/sesion.js"></script>
     <script src="js/iconos.js"></script>
     <script type="module" src="js/planes.js"></script>
   </head>
@@ -24,15 +25,15 @@
       </div>
 
       <nav>
-        <a class="nav-item" href="dashboard.html">
+        <a class="nav-item">
           <i data-lucide="house"></i>
           Dashboard
         </a>
-        <a class="nav-item" href="cliente.html">
+        <a class="nav-item">
           <i data-lucide="users"></i>
           Clientes
         </a>
-        <a class="nav-item" href="mascotas.html">
+        <a class="nav-item">
           <i data-lucide="paw-print" class="paw-icon"></i>
           Mascotas
         </a>
@@ -40,24 +41,24 @@
           <i data-lucide="shield-check"></i>
           Planes
         </a>
-        <a class="nav-item" href="historial.html">
+        <a class="nav-item">
           <i data-lucide="clipboard-list"></i>
           Registro/Historial
         </a>
-        <a class="nav-item" href="usuarios.html">
+        <a class="nav-item" data-rol="admin,recepcionista">
           <i data-lucide="user-round"></i>
           Usuarios
         </a>
-        <a class="nav-item">
+        <a class="nav-item" data-rol="admin,recepcionista">
           <i data-lucide="settings"></i>
           Configuración
         </a>
       </nav>
 
-      <a id="logoutBtn" class="logout">
+      <div class="logout">
         <i data-lucide="log-out"></i>
         Cerrar sesión
-      </a>
+      </div>
     </aside>
 
     <div class="modal-overlay oculto" id="modal-confirmar-overlay">
@@ -75,7 +76,10 @@
       <section id="vista-planes">
         <div class="encabezado-planes">
           <div>
-            <h1>Planes</h1>
+            <h1>
+              <i data-lucide="shield-check"></i>
+              Planes
+            </h1>
             <p>Gestiona los planes disponibles para tus mascotas</p>
           </div>
         </div>
@@ -111,10 +115,10 @@
             <h3><i data-lucide="clipboard"></i> Información del plan</h3>
             <label>Nombre del plan</label>
             <input id="input-nombre-plan" type="text" placeholder="Ej: Senior, Premium, Básico">
+            <label>Costo del plan</label>
+            <input id="input-costo-plan" type="number" min="0" step="0.01" placeholder="Ej: 15000">
             <label>Descripción (opcional)</label>
             <textarea id="input-descripcion-plan" placeholder="Describe brevemente este plan..."></textarea>
-            <label>Precio *</label>
-            <input id="input-precio-plan" type="number" min="0" step="0.01" placeholder="Ej: 5000" required>
             <label>Ícono del plan</label>
             <div class="selector-iconos" id="selector-iconos-plan"></div>
           </div>

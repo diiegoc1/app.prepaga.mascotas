@@ -202,8 +202,7 @@ function configurarLogout() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('supabase.auth.token');
-            window.location.href = 'index.html';
+            cerrarSesion();
         });
     }
 }
@@ -213,6 +212,7 @@ function configurarLogout() {
 // ==========================================
 
 (async () => {
+    if (!(await protegerRuta())) return;
     actualizarRelojYFecha();
     setInterval(actualizarRelojYFecha, 1000 * 60); // Actualizar reloj cada minuto
 
