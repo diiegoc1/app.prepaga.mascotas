@@ -16,6 +16,11 @@ const logoutBtn = document.getElementById('logoutBtn');
 // ==========================================
 // REVOLVER FECHA Y HORA EN TIEMPO REAL
 // ==========================================
+function obtenerNombre(){
+    const cache = JSON.parse(sessionStorage.getItem("perfil") || "null");
+    userNameDisplay.textContent = cache.nombre;
+}
+
 
 /**
  * Actualiza los elementos de fecha y hora en el topbar.
@@ -175,7 +180,7 @@ function configurarTarjetasAccion() {
         card.addEventListener('click', () => {
             switch (titulo) {
                 case 'Alta Afiliado':
-                    window.location.href = 'cliente.html?action=nuevo';
+                    window.location.href = 'cliente.html';
                     break;
                 case 'Resumen de cuentas':
                     window.location.href = 'historial.html';
@@ -184,7 +189,7 @@ function configurarTarjetasAccion() {
                     window.location.href = '';
                     break;
                 case 'Alta mascota':
-                    window.location.href = 'mascotas.html?action=nueva';
+                    window.location.href = 'mascotas.html';
                     break;
                 case 'Próximos Vencimientos':
                     window.location.href = 'planes.html';
@@ -223,6 +228,7 @@ function configurarLogout() {
     await cargarMétricas();
     inicializarGraficos();
 
+    obtenerNombre();
     if (window.lucide) {
         lucide.createIcons();
     }

@@ -25,15 +25,15 @@
       </div>
 
       <nav>
-        <a class="nav-item">
+        <a class="nav-item" href="dashboard.html">
           <i data-lucide="house"></i>
           Dashboard
         </a>
-        <a class="nav-item">
+        <a class="nav-item" href="cliente.html">
           <i data-lucide="users"></i>
           Clientes
         </a>
-        <a class="nav-item">
+        <a class="nav-item" href="mascotas.html">
           <i data-lucide="paw-print" class="paw-icon"></i>
           Mascotas
         </a>
@@ -41,24 +41,20 @@
           <i data-lucide="shield-check"></i>
           Planes
         </a>
-        <a class="nav-item">
-          <i data-lucide="clipboard-list"></i>
-          Registro/Historial
-        </a>
-        <a class="nav-item" data-rol="admin,recepcionista">
+        <a class="nav-item" href="usuarios.html" data-rol="Administrador">
           <i data-lucide="user-round"></i>
           Usuarios
         </a>
-        <a class="nav-item" data-rol="admin,recepcionista">
+        <a class="nav-item" >
           <i data-lucide="settings"></i>
           Configuración
         </a>
       </nav>
 
-      <div class="logout">
+      <a id="logoutBtn" class="logout">
         <i data-lucide="log-out"></i>
         Cerrar sesión
-      </div>
+      </a>
     </aside>
 
     <div class="modal-overlay oculto" id="modal-confirmar-overlay">

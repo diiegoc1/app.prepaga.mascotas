@@ -7,8 +7,11 @@ let usuarios = [];
 const createAdminForm = document.getElementById('createAdminForm');
 const usernameInput = document.getElementById('usernameInput');
 const passwordInput = document.getElementById('passwordInput');
+const emailInput = document.getElementById('emailInput');
+const selectInput = document.getElementById('roleSelect');
+
 const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-const isAdminCheck = document.getElementById('isAdminCheck');
+
 const usersTableBody = document.getElementById('usersTableBody');
 const themeSwitch = document.getElementById('themeSwitch');
 const logoutBtn = document.getElementById('logoutBtn');
@@ -44,9 +47,7 @@ async function cargarUsuarios() {
     renderTablaUsuarios();
 }
 
-/**
- * Renderiza dinámicamente las filas de la tabla de usuarios.
- */
+
 function renderTablaUsuarios() {
     if (!usersTableBody) return;
 
@@ -75,7 +76,7 @@ function renderTablaUsuarios() {
                     </span>
                 </td>
                 <td>
-                    <button class="btn-delete" title="Eliminar usuario" data-id="${u.id_empleado}" data-rol="admin">
+                    <button class="btn-delete" title="Eliminar usuario" data-id="${u.id_empleado}" data-rol="Administrador">
                         <i data-lucide="trash-2"></i>
                     </button>
                 </td>
@@ -83,72 +84,60 @@ function renderTablaUsuarios() {
         `;
     }).join('');
 
-    // Reinstanciar íconos de Lucide tras la inyección HTML
+ 
     if (window.lucide) {
         lucide.createIcons();
     }
     reaplicarPermisos();
 }
 
-// ==========================================
-// CREACIÓN Y ELIMINACIÓN DE USUARIOS
-// ==========================================
 
-/**
- * Crea un nuevo usuario administrador / operador.
- */
 async function crearUsuario(event) {
     event.preventDefault();
 
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-    const esAdmin = isAdminCheck.checked;
-
-    if (!username || !password) {
-        alert('Por favor complete todos los campos.');
-        return;
-    }
+    const email = emailInput.value.trim();
+    const select = roleSelect.value.trim();
+    
+    
 
     const nuevoUsuario = {
-        username: username,
-        password: password, // Si manejas hash en BD, ajustar la columna
-        rol: esAdmin ? 'Administrador' : 'Usuario',
-        es_admin: esAdmin,
-        estado: 'Activo'
+        nombre_empleado: username,
+        contraseña: password, 
+        email: email,
+        id_rol: select,
+        estado: 'activo'
     };
-
+   
     const { error } = await window.supabaseClient
-        .from('usuarios')
+        .from('empleados')
         .insert([nuevoUsuario]);
 
     if (error) {
         console.error('Error al crear usuario:', error);
-        alert('Ocurrió un error al crear el usuario. ¿Quizás el nombre ya existe?');
+        alert('Ocurrió un error al crear el usuario.');
         return;
     }
 
-    // Limpiar campos del formulario
-    createAdminForm.reset();
-    isAdminCheck.checked = true;
 
-    // Recargar la tabla
+    createAdminForm.reset();
+    
+
+
     await cargarUsuarios();
 }
 
-/**
- * Elimina un usuario especificando su ID.
- */
-async function borrarUsuario(id) {
-    const usuarioAEliminar = usuarios.find(u => String(u.id) === String(id));
-    const nombre = usuarioAEliminar ? (usuarioAEliminar.username || usuarioAEliminar.usuario) : 'este usuario';
 
-    const confirmado = confirm(`¿Estás seguro de que deseas eliminar a "${nombre}"?`);
+async function borrarUsuario(id) {
+
+    const confirmado = confirm(`¿Estás seguro de que deseas eliminar?`);
     if (!confirmado) return;
 
     const { error } = await window.supabaseClient
-        .from('usuarios')
+        .from('empleados')
         .delete()
-        .eq('id', id);
+        .eq('id_empleado', id);
 
     if (error) {
         console.error('Error al eliminar usuario:', error);
@@ -159,63 +148,15 @@ async function borrarUsuario(id) {
     await cargarUsuarios();
 }
 
-// ==========================================
-// MODO CLARO / OSCURO & UTILIDADES
-// ==========================================
-
-/**
- * Alterna el estado de visibilidad de la contraseña en el input.
- */
-function toggleMostrarPassword() {
-    const icon = togglePasswordBtn.querySelector('i');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        if (icon) icon.setAttribute('data-lucide', 'eye-off');
-    } else {
-        passwordInput.type = 'password';
-        if (icon) icon.setAttribute('data-lucide', 'eye');
-    }
-    if (window.lucide) lucide.createIcons();
-}
-
-/**
- * Maneja el switch de modo claro/oscuro con almacenamiento en localStorage.
- */
-function inicializarTema() {
-    const temaGuardado = localStorage.getItem('theme');
-    if (temaGuardado === 'dark') {
-        document.body.classList.add('dark-mode');
-        if (themeSwitch) themeSwitch.checked = true;
-    }
-
-    if (themeSwitch) {
-        themeSwitch.addEventListener('change', () => {
-            if (themeSwitch.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    }
-}
-
-// ==========================================
-// EVENT LISTENERS & INICIALIZACIÓN
-// ==========================================
 
 if (createAdminForm) {
     createAdminForm.addEventListener('submit', crearUsuario);
 }
 
-if (togglePasswordBtn) {
-    togglePasswordBtn.addEventListener('click', toggleMostrarPassword);
-}
-
 if (usersTableBody) {
     usersTableBody.addEventListener('click', (e) => {
         const btnDelete = e.target.closest('.btn-delete');
+        
         if (btnDelete) {
             const id = btnDelete.dataset.id;
             borrarUsuario(id);
@@ -233,9 +174,9 @@ function configurarLogout() {
 }
 configurarLogout();
 
-// Inicializar ejecución al cargar la página
+
 (async () => {
-    inicializarTema();
+    
     if (!(await protegerRuta({ soloAdminRecep: true }))) return;
     await cargarUsuarios();
 })();

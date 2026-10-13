@@ -10,8 +10,6 @@ Thumbs.db
 .idea/
 *.log
 
-# Archivo de prueba de conexion local (no subir)
-testConeccion.html
 
 # Credenciales de Supabase (no subir el archivo real)
 js/compartido/supabaseClient.js

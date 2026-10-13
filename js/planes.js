@@ -72,7 +72,7 @@ function filaBeneficioHTML(nombreOriginal, nombreValor) {
                     <select class="selector-icono-inline selector-icono-beneficio">
                         ${ICONOS_DISPONIBLES.map(i => `<option value="${i}" ${iconoDeBeneficio(nombreValor) === i ? 'selected' : ''}>${etiquetaIcono(i)}</option>`).join('')}
                     </select>
-                    <button type="button" class="btn-borrar-beneficio" data-rol="admin,recepcionista" title="Borrar beneficio"><i data-lucide="trash-2"></i></button>
+                    <button type="button" class="btn-borrar-beneficio" data-rol="Administrador,Recepcionista" title="Borrar beneficio"><i data-lucide="trash-2"></i></button>
                 </div>
             </td>
             ${PLANES.map(p => `
@@ -95,7 +95,7 @@ function renderEditar() {
             <div class="plan-editar">
                 <div class="plan-editar-fila">
                     <input class="nombre-editable input-nombre-plan" data-original="${p.nombre_plan}" value="${p.nombre_plan}" placeholder="Nombre del plan">
-                    <button type="button" class="btn-borrar-plan" data-rol="admin,recepcionista" data-plan="${p.nombre_plan}" title="Borrar plan"><i data-lucide="trash-2"></i></button>
+                    <button type="button" class="btn-borrar-plan" data-rol="Administrador,Recepcionista" data-plan="${p.nombre_plan}" title="Borrar plan"><i data-lucide="trash-2"></i></button>
                 </div>
                 <select class="selector-icono-inline selector-icono-plan" data-original="${p.nombre_plan}">
                     ${ICONOS_DISPONIBLES.map(i => `<option value="${i}" ${iconoDePlan(p) === i ? 'selected' : ''}>${etiquetaIcono(i)}</option>`).join('')}

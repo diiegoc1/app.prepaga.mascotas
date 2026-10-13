@@ -42,6 +42,7 @@ async function getEmpleadoActual() {
     rol: rol ? rol.nombre_rol : `Rol ${emp.id_rol}`,
   };
   sessionStorage.setItem("perfil", JSON.stringify(_perfil));
+  
   return _perfil;
 }
 
@@ -50,6 +51,7 @@ function esActivo(perfil) {
 }
 
 function aplicarPermisosUI(rol) {
+  
   document.querySelectorAll("[data-rol]").forEach((el) => {
     const permitidos = el.dataset.rol.split(",").map((s) => s.trim());
     if (!permitidos.includes(rol)) el.style.display = "none";
@@ -80,7 +82,7 @@ async function protegerRuta({ soloAdminRecep = false } = {}) {
     await cerrarSesion();
     return null;
   }
-  if (soloAdminRecep && perfil.rol === "veterinario") {
+  if (soloAdminRecep && perfil.rol === "Veterinario") {
     window.location.href = "dashboard.html";
     return null;
   }

@@ -1,187 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VetCare - Usuarios</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VetCare - Usuarios</title>
 
-  <!-- Hojas de Estilo -->
-  <link rel="stylesheet" href="css/globals.css" />
-  <link rel="stylesheet"  href="css/usuarios.css" />
+    <!-- Hojas de Estilo -->
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/usuarios.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Supabase & JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/compartido/supabaseClient.js"></script>
-  <script src="js/compartido/sesion.js"></script>
-  <script type="module" src="js/usuarios.js"></script>
-</head>
-<body>
-
-  <!-- SIDEBAR COMPARTIDO -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon">🐾</div>
-      <div class="brand-text">
-        <div class="name">VetCare</div>
-        <div class="tag">GESTIÓN VETERINARIA</div>
-      </div>
-    </div>
-
-    <nav>
-      <a href="dashboard.html" class="nav-item">
-        <i data-lucide="house"></i>
-        Dashboard
-      </a>
-      <a href="cliente.html" class="nav-item">
-        <i data-lucide="users"></i>
-        Clientes
-      </a>
-      <a href="mascotas.html" class="nav-item">
-        <i data-lucide="paw-print" class="paw-icon"></i>
-        Mascotas
-      </a>
-      <a href="planes.html" class="nav-item">
-        <i data-lucide="shield-check"></i>
-        Planes
-      </a>
-      <a href="historial.html" class="nav-item">
-        <i data-lucide="clipboard-list"></i>
-        Registro/Historial
-      </a>
-      <a class="nav-item active">
-        <i data-lucide="user-round"></i>
-        Usuarios
-      </a>
-      <a class="nav-item ">
-        <i data-lucide="settings"></i>
-        Configuración
-      </a>
-    </nav>
-
-    <a id="logoutBtn" class="logout">
-      <i data-lucide="log-out"></i>
-      Cerrar sesión
-    </a>
-  </aside>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="main-content">
-    
-    <!-- HEADER -->
-    <header class="config-header">
-      <div class="header-title">
-        <div class="header-icon"><i data-lucide="settings"></i></div>
-        <div>
-          <h2>Configuración</h2>
-          <p>Administra los usuarios del sistema</p>
+    <!-- Supabase & JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/compartido/supabaseClient.js"></script>
+    <script src="js/compartido/sesion.js"></script>
+    <script type="module" src="js/usuarios.js"></script>
+  </head>
+  <body>
+    <!-- SIDEBAR COMPARTIDO -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
         </div>
       </div>
 
-      <div class="theme-toggle">
-        <span>Modo claro/oscuro</span>
-        <label class="switch">
-          <input type="checkbox" id="themeSwitch">
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </header>
+      <nav>
+        <a href="dashboard.html" class="nav-item">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a href="cliente.html" class="nav-item">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a href="mascotas.html" class="nav-item">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a href="planes.html" class="nav-item">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a href="historial.html" class="nav-item">
+          <i data-lucide="clipboard-list"></i>
+          Registro/Historial
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
 
-    <!-- GRID DOS COLUMNAS -->
-    <section class="config-grid">
-      
-      <!-- FORMULARIO CREAR USUARIO -->
-      <div class="card form-card">
-        <div class="card-title">
-          <i data-lucide="user-plus"></i>
-          <h3>Crear usuario ADM</h3>
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <header class="config-header">
+        <div class="header-title">
+          <div class="header-icon"><i data-lucide="settings"></i></div>
+          <div>
+            <h2>Configuración</h2>
+            <p>Administra los usuarios del sistema</p>
+          </div>
         </div>
 
-        <form id="createAdminForm" data-rol="admin">
-          <div class="form-group">
-            <label for="usernameInput">Usuario</label>
-            <div class="input-icon-wrapper">
-              <i data-lucide="user"></i>
-              <input type="text" id="usernameInput" placeholder="Ingrese nombre de usuario" required>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label for="passwordInput">Contraseña</label>
-            <div class="input-icon-wrapper">
-              <i data-lucide="lock"></i>
-              <input type="password" id="passwordInput" placeholder="Ingrese contraseña" required>
-              <button type="button" class="toggle-password" id="togglePasswordBtn">
-                <i data-lucide="eye"></i>
-              </button>
-            </div>
-          </div>
+      </header>
 
-          <button type="submit" class="btn-primary">
+      <!-- GRID DOS COLUMNAS -->
+      <section class="config-grid">
+        <!-- FORMULARIO CREAR USUARIO -->
+        <div class="card form-card">
+          <div class="card-title">
             <i data-lucide="user-plus"></i>
-            Crear usuario
-          </button>
-
-          <div class="checkbox-group">
-            <input type="checkbox" id="isAdminCheck" checked>
-            <label for="isAdminCheck">Asignar como administrador (ADM)</label>
+            <h3>Crear usuario ADM</h3>
           </div>
-        </form>
-      </div>
 
-      <!-- TABLA ELIMINAR/GESTIONAR USUARIO -->
-      <div class="card table-card">
-        <div class="card-title purple-text">
-          <i data-lucide="trash-2"></i>
-          <h3>Eliminar usuario</h3>
+          <form id="createAdminForm" data-rol="Administrador">
+            <div class="form-group">
+              <label for="usernameInput">Usuario</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="user"></i>
+                <input
+                  type="text"
+                  id="usernameInput"
+                  placeholder="Ingrese nombre de usuario"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="passwordInput">Contraseña</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="lock"></i>
+                <input
+                  type="password"
+                  id="passwordInput"
+                  placeholder="Ingrese contraseña"
+                  required
+                />
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="emailInput">Correo</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="user"></i>
+                <input
+                  type="email"
+                  id="emailInput"
+                  placeholder="Ingrese el correo del usuario"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="roleSelect">Rol del Usuario</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="shield"></i>
+                <!-- Ícono a la izquierda -->
+                <select id="roleSelect">
+                  <option value="1">Administrador</option>
+                  <option value="2">Veterianario</option>
+                  <option value="3">Recepcionista</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <i data-lucide="user-plus"></i>
+              Crear usuario
+            </button>
+
+  
+          </form>
         </div>
 
-        <div class="table-responsive">
-          <table class="users-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody">
-              <!-- Carga dinámica o filas de ejemplo estáticas -->
-              <tr>
-                <td>1</td>
-                <td>juan123</td>
-                <td>Administrador</td>
-                <td><span class="badge active">Activo</span></td>
-                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>maria456</td>
-                <td>Veterinario</td>
-                <td><span class="badge active">Activo</span></td>
-                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>carlos789</td>
-                <td>Usuario</td>
-                <td><span class="badge inactive">Inactivo</span></td>
-                <td><button class="btn-delete" title="Eliminar" data-rol="admin"><i data-lucide="trash-2"></i></button></td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- TABLA ELIMINAR/GESTIONAR USUARIO -->
+        <div class="card table-card">
+          <div class="card-title purple-text">
+            <i data-lucide="trash-2"></i>
+            <h3>Eliminar usuario</h3>
+          </div>
+
+          <div class="table-responsive">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
+    </main>
 
-    </section>
-  </main>
-
-  <script>
-    lucide.createIcons();
-  </script>
-</body>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
 </html>

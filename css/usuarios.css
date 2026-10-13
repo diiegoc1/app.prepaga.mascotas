@@ -175,57 +175,6 @@ nav {
   margin: 2px 0 0 0;
 }
 
-/* TOGGLE MODO OSCURO */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.8rem;
-  color: var(--gray-500);
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 22px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: var(--gray-300);
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--purple-700);
-}
-
-input:checked + .slider:before {
-  transform: translateX(22px);
-}
-
 /* GRID DOS COLUMNAS */
 .config-grid {
   display: grid;
@@ -301,17 +250,16 @@ input:checked + .slider:before {
   background: var(--white);
 }
 
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--gray-500);
-  display: flex;
-  align-items: center;
+.input-icon-wrapper select {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  outline: none;
+  background: var(--gray-100);
+  transition: border-color 0.2s;
 }
-
 .btn-primary {
   width: 100%;
   background: var(--purple-700);
@@ -334,18 +282,7 @@ input:checked + .slider:before {
   background: var(--purple-900);
 }
 
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 1.2rem;
-  font-size: 0.8rem;
-  color: var(--gray-500);
-}
 
-.checkbox-group input {
-  accent-color: var(--purple-700);
-}
 
 /* TABLA USUARIOS */
 .table-responsive {
