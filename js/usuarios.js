@@ -98,50 +98,101 @@ async function crearUsuario(event) {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
     const email = emailInput.value.trim();
-    const select = roleSelect.value.trim();
-    
-    
+    const idRol = Number(roleSelect.value);
 
-    const nuevoUsuario = {
-        nombre_empleado: username,
-        contraseña: password, 
-        email: email,
-        id_rol: select,
-        estado: 'activo'
-    };
-   
-    const { error } = await window.supabaseClient
-        .from('empleados')
-        .insert([nuevoUsuario]);
-
-    if (error) {
-        console.error('Error al crear usuario:', error);
-        alert('Ocurrió un error al crear el usuario.');
+    if (!username) {
+        alert('Ingresá el nombre del empleado.');
+        usernameInput.focus();
+        return;
+    }
+    if (!email || !email.includes('@')) {
+        alert('Ingresá un email válido.');
+        emailInput.focus();
+        return;
+    }
+    if (!password || password.length < 6) {
+        alert('La clave debe tener 6 o más caracteres.');
+        passwordInput.focus();
+        return;
+    }
+    if (!Number.isInteger(idRol) || idRol <= 0) {
+        alert('Seleccioná un rol válido.');
         return;
     }
 
+    const btn = createAdminForm.querySelector('button[type="submit"]');
+    const textoOriginal = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Creando...';
+    }
+
+    // Alta vía Edge Function: crea el usuario Auth + la fila en empleados.
+    // Ya no se escribe `contraseña` (login 100% Auth).
+    const { data, error } = await window.supabaseClient.functions.invoke(
+        'gestionar-empleado',
+        {
+            body: {
+                action: 'crear',
+                nombre_empleado: username,
+                email,
+                password,
+                id_rol: idRol,
+            },
+        }
+    );
+
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+    }
+
+    const mensajeError = await mensajeErrorFuncion(data, error);
+    if (mensajeError) {
+        console.error('Error al crear usuario:', error || data);
+        alert(mensajeError);
+        return;
+    }
 
     createAdminForm.reset();
-    
-
-
     await cargarUsuarios();
+}
+
+// Extrae el mensaje legible que devuelve la Edge Function
+// (viene en el JSON del body tanto en 200 como en 4xx/5xx).
+async function mensajeErrorFuncion(data, error) {
+    if (data && data.error) return data.error;
+    if (!error) return null;
+    try {
+        const cuerpo = await error.context?.json?.();
+        if (cuerpo && cuerpo.error) return cuerpo.error;
+    } catch {}
+    return 'No se pudo completar la operación.';
 }
 
 
 async function borrarUsuario(id) {
-
-    const confirmado = confirm(`¿Estás seguro de que deseas eliminar?`);
+    const usuarioAEliminar = usuarios.find(
+        (u) => String(u.id_empleado) === String(id)
+    );
+    const nombre = usuarioAEliminar
+        ? usuarioAEliminar.nombre_empleado
+        : 'este usuario';
+    const confirmado = confirm(
+        `¿Estás seguro de que deseas eliminar a "${nombre}"? Se eliminará su acceso y su ficha.`
+    );
     if (!confirmado) return;
 
-    const { error } = await window.supabaseClient
-        .from('empleados')
-        .delete()
-        .eq('id_empleado', id);
+    // Baja total vía Edge Function: borra el usuario Auth + la fila en empleados.
+    const { data, error } = await window.supabaseClient.functions.invoke(
+        'gestionar-empleado',
+        { body: { action: 'eliminar', id_empleado: Number(id) } }
+    );
 
-    if (error) {
-        console.error('Error al eliminar usuario:', error);
-        alert('No se pudo eliminar el usuario.');
+    const mensajeError = await mensajeErrorFuncion(data, error);
+    if (mensajeError) {
+        console.error('Error al eliminar usuario:', error || data);
+        alert(mensajeError);
         return;
     }
 
