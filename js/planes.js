@@ -1,3 +1,13 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { protegerRuta, cerrarSesion, reaplicarPermisos } from "./compartido/sesion.js";
+import {
+    ICONOS_DISPONIBLES,
+    etiquetaIcono,
+    guardarIconoBeneficio,
+    iconoDeBeneficio,
+    iconoDePlan,
+} from "./iconos.js";
+
 let PLANES = [];
 let BENEFICIOS = [];
 let iconoPlanSeleccionado = 'paw-print';
@@ -13,8 +23,8 @@ function mostrarVista(vista) {
 
 async function cargarDatos() {
     const [{ data: planes, error: e1 }, { data: beneficios, error: e2 }] = await Promise.all([
-        window.supabaseClient.from('planes').select('*'),
-        window.supabaseClient.from('beneficios_plan').select('*')
+        supabase.from('planes').select('*'),
+        supabase.from('beneficios_plan').select('*')
     ]);
     if (e1 || e2) {
         console.error(e1 || e2);
@@ -150,8 +160,8 @@ function confirmarModal(mensaje) {
 async function borrarPlan(nombrePlan) {
     const confirmado = await confirmarModal(`¿Borrar el plan "${nombrePlan}"? Esto también borra sus beneficios asociados.`);
     if (!confirmado) return;
-    await window.supabaseClient.from('beneficios_plan').delete().eq('nombre_plan', nombrePlan);
-    await window.supabaseClient.from('planes').delete().eq('nombre_plan', nombrePlan);
+    await supabase.from('beneficios_plan').delete().eq('nombre_plan', nombrePlan);
+    await supabase.from('planes').delete().eq('nombre_plan', nombrePlan);
     await cargarDatos();
     renderEditar();
 }
@@ -159,7 +169,7 @@ async function borrarPlan(nombrePlan) {
 async function borrarBeneficio(nombreBeneficio) {
     const confirmado = await confirmarModal(`¿Borrar el beneficio "${nombreBeneficio}" de todos los planes?`);
     if (!confirmado) return;
-    await window.supabaseClient.from('beneficios_plan').delete().eq('nombre_beneficio', nombreBeneficio);
+    await supabase.from('beneficios_plan').delete().eq('nombre_beneficio', nombreBeneficio);
     await cargarDatos();
     renderEditar();
 }
@@ -177,7 +187,7 @@ async function guardarEdicion() {
         const cambios = { costo, icono: inputIcono.value };
         if (nuevo && nuevo !== original) cambios.nombre_plan = nuevo;
 
-        const { error } = await window.supabaseClient.from('planes').update(cambios).eq('nombre_plan', original);
+        const { error } = await supabase.from('planes').update(cambios).eq('nombre_plan', original);
         if (error) {
             console.error(error);
             alert(`No se pudo guardar el plan "${original}"`);
@@ -190,7 +200,7 @@ async function guardarEdicion() {
         if (!nombreActual) continue; // fila nueva sin nombre cargado: se ignora
 
         if (original && nombreActual !== original) {
-            await window.supabaseClient.from('beneficios_plan')
+            await supabase.from('beneficios_plan')
                 .update({ nombre_beneficio: nombreActual })
                 .eq('nombre_beneficio', original);
         }
@@ -202,11 +212,11 @@ async function guardarEdicion() {
             const existiaAntes = original ? tienePlanBeneficio(nombrePlan, original) : false;
 
             if (chk.checked && !existiaAntes) {
-                await window.supabaseClient.from('beneficios_plan').insert({
+                await supabase.from('beneficios_plan').insert({
                     nombre_plan: nombrePlan, nombre_beneficio: nombreActual, cantidad: 1, periodo: 'mensual'
                 });
             } else if (!chk.checked && existiaAntes) {
-                await window.supabaseClient.from('beneficios_plan')
+                await supabase.from('beneficios_plan')
                     .delete().eq('nombre_plan', nombrePlan).eq('nombre_beneficio', original);
             }
         }
@@ -255,7 +265,7 @@ async function crearPlan() {
         return;
     }
 
-    const { error: errorPlan } = await window.supabaseClient.from('planes').insert({
+    const { error: errorPlan } = await supabase.from('planes').insert({
         nombre_plan: nombre,
         costo,
         descripcion,
@@ -271,7 +281,7 @@ async function crearPlan() {
         .map(chk => ({ nombre_plan: nombre, nombre_beneficio: chk.dataset.beneficio, cantidad: 1, periodo: 'mensual' }));
 
     if (seleccionados.length > 0) {
-        await window.supabaseClient.from('beneficios_plan').insert(seleccionados);
+        await supabase.from('beneficios_plan').insert(seleccionados);
     }
 
     await cargarDatos();

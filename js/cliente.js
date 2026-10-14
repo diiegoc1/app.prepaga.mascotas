@@ -1,12 +1,15 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { protegerRuta, cerrarSesion, reaplicarPermisos } from "./compartido/sesion.js";
+
 let clientes = [];
 
 // ---------- SUPABASE: SELECT y guardar en clientes ----------
 async function cargarClientesDesdeSupabase() {
-  if (!window.supabaseClient) {
+  if (!supabase) {
     console.warn("Supabase no cargado");
     return;
   }
-  const { data, error } = await window.supabaseClient
+  const { data, error } = await supabase
     .from("clientes")
     .select("*");
   if (error) {
@@ -322,7 +325,7 @@ function altaCliente() {
 }
 
 async function actualizarClienteEnSupabase(datos) {
-  const { error } = await window.supabaseClient
+  const { error } = await supabase
     .from("clientes")
     .update({
       dni: datos.dni,
@@ -345,7 +348,7 @@ async function actualizarClienteEnSupabase(datos) {
 }
 
 async function eliminarClienteEnSupabase(dni) {
-  const { error } = await window.supabaseClient
+  const { error } = await supabase
     .from("clientes")
     .delete()
     .eq("dni", dni);
@@ -359,7 +362,7 @@ async function eliminarClienteEnSupabase(dni) {
 }
 
 async function altaClienteEnSupabase(datos) {
-  const { error } = await window.supabaseClient
+  const { error } = await supabase
     .from("clientes")
     .insert({
       dni: datos.dni,
@@ -545,11 +548,11 @@ const mbody = document.getElementById("mascotas-body");
 
 async function cargarMascotasDesdeSupabase(dniOriginal, nombre, apellido) {
   mbody.innerHTML="";
-  if (!window.supabaseClient) {
+  if (!supabase) {
     console.warn("Supabase no cargado");
     return;
   }
-  const { data, error } = await window.supabaseClient
+  const { data, error } = await supabase
     .from("mascotas")
     .select("nombre_mascota,especie,raza,observaciones")
     .eq("dni", dniOriginal);

@@ -1,3 +1,6 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { protegerRuta, cerrarSesion, reaplicarPermisos } from "./compartido/sesion.js";
+
 // ==========================================
 // CONFIGURACIÓN Y ESTADO GENERAL
 // ==========================================
@@ -25,11 +28,11 @@ const logoutBtn = document.getElementById('logoutBtn');
  */
 async function cargarUsuarios() {
     const [{ data: empleados, error: e1 }, { data: roles, error: e2 }] = await Promise.all([
-        window.supabaseClient
+        supabase
             .from('empleados')
             .select('id_empleado, nombre_empleado, estado, id_rol')
             .order('id_empleado', { ascending: true }),
-        window.supabaseClient
+        supabase
             .from('roles')
             .select('id_rol, nombre_rol')
     ]);
@@ -129,7 +132,7 @@ async function crearUsuario(event) {
 
     // Alta vía Edge Function: crea el usuario Auth + la fila en empleados.
     // Ya no se escribe `contraseña` (login 100% Auth).
-    const { data, error } = await window.supabaseClient.functions.invoke(
+    const { data, error } = await supabase.functions.invoke(
         'gestionar-empleado',
         {
             body: {
@@ -184,7 +187,7 @@ async function borrarUsuario(id) {
     if (!confirmado) return;
 
     // Baja total vía Edge Function: borra el usuario Auth + la fila en empleados.
-    const { data, error } = await window.supabaseClient.functions.invoke(
+    const { data, error } = await supabase.functions.invoke(
         'gestionar-empleado',
         { body: { action: 'eliminar', id_empleado: Number(id) } }
     );

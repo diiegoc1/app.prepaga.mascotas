@@ -1,13 +1,14 @@
 // ==========================================
 // SESIÓN CENTRAL (Supabase Auth + Roles)
-// Requiere: js/compartido/supabaseClient.js cargado antes.
+// Módulo ES: importar { protegerRuta, cerrarSesion, ... } donde se necesite.
 // Guarda en sessionStorage solo {id_empleado, nombre, rol} (nunca password).
 // ==========================================
+import { supabase } from "./supabaseClient.js";
+
 let _perfil = null;
 
 async function getSession() {
-  if (!window.supabaseClient) return null;
-  const { data } = await window.supabaseClient.auth.getSession();
+  const { data } = await supabase.auth.getSession();
   return data.session ?? null;
 }
 
@@ -24,12 +25,12 @@ async function getEmpleadoActual() {
   } catch {}
   const [{ data: emp, error: e1 }, { data: roles, error: e2 }] =
     await Promise.all([
-      window.supabaseClient
+      supabase
         .from("empleados")
         .select("id_empleado, nombre_empleado, estado, id_rol")
         .eq("user_id", session.user.id)
         .single(),
-      window.supabaseClient.from("roles").select("id_rol, nombre_rol"),
+      supabase.from("roles").select("id_rol, nombre_rol"),
     ]);
   if (e1 || e2 || !emp) return null;
   const rol = (roles || []).find(
@@ -42,7 +43,7 @@ async function getEmpleadoActual() {
     rol: rol ? rol.nombre_rol : `Rol ${emp.id_rol}`,
   };
   sessionStorage.setItem("perfil", JSON.stringify(_perfil));
-  
+
   return _perfil;
 }
 
@@ -51,7 +52,7 @@ function esActivo(perfil) {
 }
 
 function aplicarPermisosUI(rol) {
-  
+
   document.querySelectorAll("[data-rol]").forEach((el) => {
     const permitidos = el.dataset.rol.split(",").map((s) => s.trim());
     if (!permitidos.includes(rol)) el.style.display = "none";
@@ -92,7 +93,7 @@ async function protegerRuta({ soloAdminRecep = false } = {}) {
 
 async function cerrarSesion() {
   try {
-    await window.supabaseClient.auth.signOut();
+    await supabase.auth.signOut();
   } catch {}
   sessionStorage.removeItem("empleado");
   sessionStorage.removeItem("perfil");
@@ -100,3 +101,14 @@ async function cerrarSesion() {
   localStorage.removeItem("supabase.auth.token");
   window.location.href = "index.html";
 }
+
+export {
+  getSession,
+  getEmpleadoActual,
+  esActivo,
+  aplicarPermisosUI,
+  rolCache,
+  reaplicarPermisos,
+  protegerRuta,
+  cerrarSesion,
+};

@@ -1,3 +1,6 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { protegerRuta, cerrarSesion, reaplicarPermisos } from "./compartido/sesion.js";
+
 // ============================================
 // VARIABLES GLOBALES
 // ============================================
@@ -62,12 +65,12 @@ function calcularEdad(fechaNac) {
 // SUPABASE: CRUD
 // ============================================
 async function cargarMascotasDesdeSupabase() {
-  if (!window.supabaseClient) {
+  if (!supabase) {
     console.warn('Supabase no cargado');
     return;
   }
 
-  const { data, error } = await window.supabaseClient
+  const { data, error } = await supabase
     .from('mascotas')
     .select('*');
 
@@ -117,7 +120,7 @@ async function guardarMascotaEnSupabase(datos) {
   };
 
   if (datos.id_mascota) {
-    const { error } = await window.supabaseClient
+    const { error } = await supabase
       .from('mascotas')
       .update(payload)
       .eq('id_mascota', datos.id_mascota);
@@ -129,7 +132,7 @@ async function guardarMascotaEnSupabase(datos) {
     }
   } else {
     payload.fecha_registro = new Date().toISOString();
-    const { error } = await window.supabaseClient
+    const { error } = await supabase
       .from('mascotas')
       .insert([payload]);
 
@@ -145,7 +148,7 @@ async function guardarMascotaEnSupabase(datos) {
 }
 
 async function eliminarMascotaEnSupabase(id) {
-  const { error } = await window.supabaseClient
+  const { error } = await supabase
     .from('mascotas')
     .delete()
     .eq('id_mascota', id);
@@ -533,7 +536,7 @@ if (formMascota) {
 
     // Verificar que el DNI del dueño exista en la tabla clientes
     try {
-      const { data: clienteExiste, error: clienteError } = await window.supabaseClient
+      const { data: clienteExiste, error: clienteError } = await supabase
         .from('clientes')
         .select('dni')
         .eq('dni', datos.dni)

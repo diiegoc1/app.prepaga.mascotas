@@ -1,3 +1,6 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { getEmpleadoActual, esActivo } from "./compartido/sesion.js";
+
 document.addEventListener('DOMContentLoaded', ()=>{
 
 const btnRecuperarContraseña = document.getElementById('btnRecuperarContraseña');
@@ -39,7 +42,7 @@ btnIngresar.addEventListener('click', async ()=>{
 
     btnIngresar.disabled = true;
 
-    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password: contraseña
     });
@@ -53,7 +56,7 @@ btnIngresar.addEventListener('click', async ()=>{
 
     const perfil = await getEmpleadoActual();
     if (!perfil || !esActivo(perfil)) {
-        await window.supabaseClient.auth.signOut();
+        await supabase.auth.signOut();
         mostrarAviso();
         return;
     }

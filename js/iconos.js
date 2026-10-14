@@ -58,3 +58,14 @@ function iconoDeBeneficio(nombre) {
 function iconoDePlan(plan) {
     return (plan && plan.icono) || ICONOS_PLAN_DEFAULT[plan && plan.nombre_plan] || 'paw-print';
 }
+
+export {
+    ICONOS_BENEFICIO_DEFAULT,
+    ICONOS_PLAN_DEFAULT,
+    ICONOS_DISPONIBLES,
+    ICONOS_LABELS,
+    etiquetaIcono,
+    guardarIconoBeneficio,
+    iconoDeBeneficio,
+    iconoDePlan,
+};

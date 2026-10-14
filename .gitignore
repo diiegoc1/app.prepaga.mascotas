@@ -11,5 +11,6 @@ Thumbs.db
 *.log
 
 
-# Credenciales de Supabase (no subir el archivo real)
-js/compartido/supabaseClient.js
+# Variables de entorno locales (credenciales de Supabase, no subir)
+.env
+.env.local

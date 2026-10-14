@@ -1,3 +1,6 @@
+import { supabase } from "./compartido/supabaseClient.js";
+import { protegerRuta, cerrarSesion } from "./compartido/sesion.js";
+
 // ==========================================
 // ESTADO Y REFERENCIAS
 // ==========================================
@@ -55,8 +58,8 @@ async function cargarMétricas() {
             { count: countClientes, error: errClientes },
             { count: countMascotas, error: errMascotas }
         ] = await Promise.all([
-            window.supabaseClient.from('clientes').select('*', { count: 'exact', head: true }),
-            window.supabaseClient.from('mascotas').select('*', { count: 'exact', head: true })
+            supabase.from('clientes').select('*', { count: 'exact', head: true }),
+            supabase.from('mascotas').select('*', { count: 'exact', head: true })
         ]);
 
         if (!errClientes && countClientes !== null && totalAfiliadosCount) {
