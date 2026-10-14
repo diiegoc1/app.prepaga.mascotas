@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuración - VetCare</title>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/configuracion.css" />
+
+    <script type="module" src="js/compartido/tema.js"></script> 
+    <script type="module" src="js/configuracion.js"></script>
+  </head>
+  <body>
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="cliente.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item" href="mascotas.html">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item" href="planes.html">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item" href="contratos.html">
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
+        <a class="nav-item" href="usuarios.html" data-rol="Administrador">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item active" href="configuracion.html">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <main>
+      <div class="page-header">
+        <div class="ctn-seccion">
+          <div class="ctn-icon-seccion">
+            <i data-lucide="settings" class="icon-users-seccion"></i>
+          </div>
+          <div>
+            <h1>Configuración</h1>
+            <p>Administra tu cuenta y preferencias</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-grid">
+        <!-- ===== CARD: MI PERFIL ===== -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <div class="config-icon-wrap">
+              <i data-lucide="user-round"></i>
+            </div>
+            <div>
+              <h2>Mi perfil</h2>
+              <p>Información de tu cuenta</p>
+            </div>
+          </div>
+
+          <div class="perfil-avatar">
+            <div class="avatar-circle" id="avatarCircle">
+              <!-- Iniciales se ponen desde JS -->
+            </div>
+          </div>
+
+          <div class="perfil-info">
+            <div class="perfil-row">
+              <span class="perfil-label">
+                <i data-lucide="user"></i>
+                Usuario
+              </span>
+              <span class="perfil-value" id="perfilNombre">—</span>
+            </div>
+
+            <div class="perfil-row">
+              <span class="perfil-label">
+                <i data-lucide="shield"></i>
+                Rol
+              </span>
+              <span class="perfil-value">
+                <span class="badge-rol" id="perfilRol">—</span>
+              </span>
+            </div>
+
+            <div class="perfil-row">
+              <span class="perfil-label">
+                <i data-lucide="circle-dot"></i>
+                Estado
+              </span>
+              <span class="perfil-value">
+                <span class="badge-estado" id="perfilEstado">—</span>
+              </span>
+            </div>
+
+            <div class="perfil-row">
+              <span class="perfil-label">
+                <i data-lucide="hash"></i>
+                ID Empleado
+              </span>
+              <span class="perfil-value" id="perfilId">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CARD: CAMBIAR CONTRASEÑA ===== -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <div class="config-icon-wrap">
+              <i data-lucide="key-round"></i>
+            </div>
+            <div>
+              <h2>Cambiar contraseña</h2>
+              <p>Actualizá tu clave de acceso</p>
+            </div>
+          </div>
+
+          <form id="formCambiarPassword" class="config-form">
+            <div class="form-field">
+              <label for="nuevaPassword">
+                <i data-lucide="lock"></i>
+                Nueva contraseña
+              </label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  id="nuevaPassword"
+                  placeholder="Mínimo 6 caracteres"
+                  minlength="6"
+                  required
+                  autocomplete="new-password"
+                />
+                <button type="button" class="toggle-pass" data-target="nuevaPassword">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="confirmarPassword">
+                <i data-lucide="lock"></i>
+                Confirmar contraseña
+              </label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  id="confirmarPassword"
+                  placeholder="Repetí la contraseña"
+                  minlength="6"
+                  required
+                  autocomplete="new-password"
+                />
+                <button type="button" class="toggle-pass" data-target="confirmarPassword">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="passwordFeedback" class="password-feedback hidden">
+              <!-- Mensaje de error o éxito -->
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="btn-confirmar" id="btnCambiarPassword">
+                <i data-lucide="check"></i>
+                <span id="btnCambiarTexto">Cambiar contraseña</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

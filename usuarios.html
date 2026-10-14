@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VetCare - Usuarios</title>
+
+    <!-- Hojas de Estilo -->
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/usuarios.css" />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- JS -->
+    <script type="module" src="js/compartido/tema.js"></script>
+    <script type="module" src="js/usuarios.js"></script>
+  </head>
+  <body>
+    <!-- SIDEBAR COMPARTIDO -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="dashboard.html" class="nav-item">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a href="cliente.html" class="nav-item">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a href="mascotas.html" class="nav-item">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a href="planes.html" class="nav-item">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a href="contratos.html" class="nav-item">
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
+
+        <a class="nav-item active">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item" href="configuracion.html">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+      <!-- HEADER CORREGIDO -->
+      <header class="config-header">
+        <div class="header-title">
+          <div class="header-icon"><i data-lucide="user-round"></i></div>
+          <div>
+            <h2>Usuarios</h2>
+            <p>Administra los usuarios del sistema</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- GRID DOS COLUMNAS -->
+      <section class="config-grid">
+        <!-- FORMULARIO CREAR USUARIO -->
+        <div class="card form-card">
+          <div class="card-title">
+            <i data-lucide="user-plus"></i>
+            <h3>Crear usuario ADM</h3>
+          </div>
+
+          <form id="createAdminForm" data-rol="Administrador">
+            <div class="form-group">
+              <label for="usernameInput">Usuario</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="user"></i>
+                <input
+                  type="text"
+                  id="usernameInput"
+                  placeholder="Ingrese nombre de usuario"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="passwordInput">Contraseña</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="lock"></i>
+                <input
+                  type="password"
+                  id="passwordInput"
+                  placeholder="Ingrese contraseña"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="emailInput">Correo</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="user"></i>
+                <input
+                  type="email"
+                  id="emailInput"
+                  placeholder="Ingrese el correo del usuario"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="roleSelect">Rol del Usuario</label>
+              <div class="input-icon-wrapper">
+                <i data-lucide="shield"></i>
+                <select id="roleSelect">
+                  <option value="1">Administrador</option>
+                  <option value="2">Veterinario</option>
+                  <option value="3">Recepcionista</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <i data-lucide="user-plus"></i>
+              Crear usuario
+            </button>
+          </form>
+        </div>
+
+        <!-- TABLA ELIMINAR/GESTIONAR USUARIO -->
+        <div class="card table-card">
+          <div class="card-title purple-text">
+            <i data-lucide="trash-2"></i>
+            <h3>Eliminar usuario</h3>
+          </div>
+
+          <div class="table-responsive">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,465 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family:
+    "Segoe UI",
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    sans-serif;
+  background: var(--gray-100);
+  color: var(--ink);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    180deg,
+    var(--purple-700) 0%,
+    var(--purple-900) 100%
+  );
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  border-radius: 0px 8px 8px 0px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 20px 8px;
+  margin-bottom: 60px;
+}
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.brand-text .name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.1;
+}
+.brand-text .tag {
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  opacity: 0.7;
+}
+
+nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: var(--radius);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+}
+.nav-item.active {
+  background: var(--white);
+  color: var(--purple-700);
+  font-weight: 600;
+}
+.paw-icon {
+  transform: rotate(-45deg);
+  display: inline-block;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 11px;
+  color: var(--purple-900);
+  font-size: 14px;
+  cursor: pointer;
+  background-color: var(--white);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+.logout svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- MAIN ---------- */
+main {
+  flex: 1;
+  padding: 24px 32px;
+  min-width: 0;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 20px 0;
+  margin-bottom: 0;
+}
+.page-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 1.8rem;
+}
+.page-header p {
+  margin: 0;
+  color: var(--gray-500);
+  font-size: 0.95rem;
+}
+
+.ctn-seccion {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+.ctn-icon-seccion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom right, #bb73eb, #6c4ee3);
+  width: 56px;
+  height: 56px;
+  border-radius: 2.5rem;
+}
+.icon-users-seccion {
+  color: var(--white);
+  width: 2rem;
+  height: 2rem;
+}
+
+/* ---------- GRID DE CARDS ---------- */
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.config-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.config-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.config-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.config-icon-wrap svg {
+  width: 20px;
+  height: 20px;
+}
+
+.config-card-header h2 {
+  margin: 0 0 2px 0;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+.config-card-header p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+/* ---------- MI PERFIL ---------- */
+.perfil-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.avatar-circle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 20px rgba(92, 63, 214, 0.28);
+}
+
+.perfil-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perfil-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.perfil-row:last-child {
+  border-bottom: none;
+}
+
+.perfil-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+.perfil-label svg {
+  width: 16px;
+  height: 16px;
+}
+
+.perfil-value {
+  font-size: 0.9rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+}
+
+.badge-rol {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--purple-100);
+  color: var(--purple-700);
+}
+.badge-rol.rol-admin {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+.badge-rol.rol-vet {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.badge-rol.rol-recep {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.badge-estado.activo {
+  background: var(--green-bg);
+  color: var(--green-fg);
+}
+.badge-estado.inactivo {
+  background: var(--red-bg);
+  color: var(--red-fg);
+}
+
+/* ---------- FORM CAMBIAR CONTRASEÑA ---------- */
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.form-field label svg {
+  width: 14px;
+  height: 14px;
+  color: var(--purple-700);
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  padding: 4px 12px 4px 14px;
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-wrap:focus-within {
+  border-color: var(--purple-600);
+  box-shadow: 0 0 0 3px var(--purple-100);
+}
+
+.input-wrap input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 10px 0;
+  font-family: inherit;
+}
+.input-wrap input::placeholder {
+  color: var(--gray-500);
+}
+
+.toggle-pass {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.toggle-pass:hover {
+  color: var(--purple-700);
+  background: var(--purple-50);
+}
+.toggle-pass svg {
+  width: 16px;
+  height: 16px;
+}
+
+.password-feedback {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.password-feedback.hidden {
+  display: none;
+}
+.password-feedback.success {
+  background: var(--green-bg);
+  color: var(--green-fg);
+}
+.password-feedback.error {
+  background: var(--red-bg);
+  color: var(--red-fg);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.btn-confirmar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: var(--purple-700);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(92, 63, 214, 0.28);
+  transition: background 0.15s;
+  width: 100%;
+  justify-content: center;
+}
+.btn-confirmar:hover:not(:disabled) {
+  background: var(--purple-900);
+}
+.btn-confirmar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-confirmar svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  main {
+    padding: 16px;
+  }
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+  .config-card {
+    padding: 20px;
+  }
+}

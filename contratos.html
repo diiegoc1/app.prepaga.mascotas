@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contratos - VetCare</title>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/contratos.css" />
+    <script type="module" src="js/compartido/tema.js"></script>
+    <script type="module" src="js/contratos.js"></script>
+  </head>
+  <body>
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="cliente.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item" href="mascotas.html">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item" href="planes.html">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
+        
+        <a class="nav-item" href="usuarios.html" data-rol="Administrador">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item" href="configuracion.html">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <main>
+      <!-- ===== VISTA LISTA ===== -->
+      <section id="vistaLista" class="vista-lista">
+        <div class="page-header">
+          <div class="ctn-seccion">
+            <div class="ctn-icon-seccion">
+              <i data-lucide="file-text" class="icon-users-seccion"></i>
+            </div>
+            <div>
+              <h1>Contratos</h1>
+              <p>Relación de clientes, mascotas y planes</p>
+            </div>
+          </div>
+          <button
+            class="btn-alta"
+            id="btnNuevoContrato"
+            data-rol="Administrador,Recepcionista"
+          >
+            <i data-lucide="plus"></i>
+            Nuevo contrato
+          </button>
+        </div>
+
+        <!-- TOOLBAR CON BUSCADOR Y FILTROS -->
+        <div class="toolbar-filtros">
+          <div class="search-box">
+            <i data-lucide="search"></i>
+            <input
+              type="text"
+              id="inputBuscador"
+              placeholder="Buscar por mascota, DNI del dueño o plan..."
+            />
+          </div>
+
+          <div class="filtros-row">
+            <div class="filtro-group">
+              <label for="filtroEstado">
+                <i data-lucide="circle-dot"></i>
+                Estado
+              </label>
+              <select id="filtroEstado">
+                <option value="">Todos</option>
+                <option value="Activo">Activo</option>
+                <option value="Vencido">Vencido</option>
+                <option value="Cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <div class="filtro-group">
+              <label for="filtroPlan">
+                <i data-lucide="shield-check"></i>
+                Plan
+              </label>
+              <select id="filtroPlan">
+                <option value="">Todos</option>
+                <!-- se llena desde JS -->
+              </select>
+            </div>
+
+            <div class="filtro-group">
+              <label for="filtroFechaDesde">
+                <i data-lucide="calendar"></i>
+                Inicio desde
+              </label>
+              <input type="date" id="filtroFechaDesde" />
+            </div>
+
+            <div class="filtro-group">
+              <label for="filtroFechaHasta">
+                <i data-lucide="calendar"></i>
+                Inicio hasta
+              </label>
+              <input type="date" id="filtroFechaHasta" />
+            </div>
+
+            <button
+              class="btn-limpiar-filtros"
+              id="btnLimpiarFiltros"
+              title="Limpiar filtros"
+            >
+              <i data-lucide="x"></i>
+              Limpiar
+            </button>
+          </div>
+
+          <div class="contador-resultados" id="contadorResultados"></div>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Dueño</th>
+                <th>Mascota</th>
+                <th>Plan</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Días restantes</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="contratos-body">
+              <!-- se llena desde JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== VISTA FORMULARIO (ALTA / EDICIÓN) ===== -->
+      <section id="vistaEditar" class="vista-editar" style="display: none">
+        <div class="alta-header">
+          <button class="btn-back" id="btnVolver">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <div class="alta-header-titulo">
+            <h1 id="tituloFormulario">Nuevo contrato</h1>
+            <p id="subtituloFormulario">Asignar un plan a una mascota</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <form id="formContrato">
+            <div class="form-grid">
+              <!-- Mascota (con buscador typeahead) -->
+              <div class="form-field full-width">
+                <label for="buscarMascota">Mascota *</label>
+                <div class="input-wrap mascota-search-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="paw-print"></i>
+                  </div>
+                  <input
+                    type="text"
+                    id="buscarMascota"
+                    placeholder="Buscar por nombre de mascota o DNI del dueño..."
+                    autocomplete="off"
+                  />
+                  <div id="mascotaResults" class="mascota-results hidden"></div>
+                </div>
+
+                <!-- Card con la mascota seleccionada -->
+                <div id="mascotaSeleccionada" class="mascota-seleccionada hidden"></div>
+
+                <!-- Hidden fields -->
+                <input type="hidden" id="contratoId" value="" />
+                <input type="hidden" id="mascotaIdSeleccionada" value="" />
+                <input type="hidden" id="dniSeleccionado" value="" />
+              </div>
+
+              <!-- Plan -->
+              <div class="form-field">
+                <label for="selectPlan">Plan *</label>
+                <div class="input-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="shield-check"></i>
+                  </div>
+                  <select id="selectPlan" required>
+                    <option value="">Seleccionar plan</option>
+                    <!-- se llena desde JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Duración -->
+              <div class="form-field">
+                <label for="selectDuracion">Duración *</label>
+                <div class="input-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="clock"></i>
+                  </div>
+                  <select id="selectDuracion">
+                    <option value="30">30 días (1 mes)</option>
+                    <option value="90">90 días (3 meses)</option>
+                    <option value="180">180 días (6 meses)</option>
+                    <option value="365">365 días (12 meses)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Fecha inicio -->
+              <div class="form-field">
+                <label for="fechaInicio">Fecha de inicio *</label>
+                <div class="input-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="calendar"></i>
+                  </div>
+                  <input type="date" id="fechaInicio" required />
+                </div>
+              </div>
+
+              <!-- Fecha fin -->
+              <div class="form-field">
+                <label for="fechaFin">Fecha de fin *</label>
+                <div class="input-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="calendar-check"></i>
+                  </div>
+                  <input type="date" id="fechaFin" required />
+                </div>
+              </div>
+
+              <!-- Estado -->
+              <div class="form-field">
+                <label for="selectEstado">Estado *</label>
+                <div class="input-wrap">
+                  <div class="input-icon">
+                    <i data-lucide="circle-dot"></i>
+                  </div>
+                  <select id="selectEstado">
+                    <option value="Activo">Activo</option>
+                    <option value="Vencido">Vencido</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="btn-confirmar">
+                <i data-lucide="check"></i>
+                <span id="btnConfirmarTexto">Confirmar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== CONFIRM MODAL: ELIMINAR ===== -->
+    <div id="confirm-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>¿Eliminar contrato?</h3>
+        <p id="confirm-text">
+          ¿Seguro que querés eliminar este contrato? Esta acción no se puede
+          deshacer.
+        </p>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="confirm-cancel">Cancelar</button>
+          <button class="btn-danger" id="confirm-delete">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CONFIRM MODAL: REEMPLAZAR CONTRATO ACTIVO ===== -->
+    <div id="replace-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>Mascota con contrato activo</h3>
+        <p id="replace-text">
+          Esta mascota ya tiene un contrato activo. ¿Querés cancelarlo y crear
+          uno nuevo?
+        </p>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="replace-cancel">Cancelar</button>
+          <button class="btn-confirmar-modal" id="replace-confirm">
+            Sí, reemplazar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

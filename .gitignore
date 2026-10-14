@@ -1,0 +1,16 @@
+# Dependencias / build (por si se agrega tooling despues)
+node_modules/
+dist/
+build/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+
+# Variables de entorno locales (credenciales de Supabase, no subir)
+.env
+.env.local

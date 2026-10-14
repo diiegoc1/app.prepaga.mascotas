@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/login.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+  (function() {
+    var t = localStorage.getItem('vetcare_tema');
+    if (t !== 'light' && t !== 'dark') {
+      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+    <script type="module" src="js/compartido/tema.js"></script>
+    <script type="module" src="js/login.js"></script>
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="logo">
+      <img class="logotipo" src="/img/icono.png" alt="" />
+      <h1 class="logotexto-login">Tolkeyén</h1>
+    </div>
+
+    <div class="contenedor-login" id="contenedorLogin">
+      <div class="contenedor-iconologin-login">
+        <i class="fa-solid fa-paw"></i>
+        <span>Login</span>
+      </div>
+      <h2>Bienvenido al Portal de Gestión</h2>
+
+      <form id="loginForm" onsubmit="event.preventDefault();">
+  <div class="label-usuario-login">
+    <i class="fa-solid fa-user icono-usuario-login"></i>
+    <input class="input-login" type="email" placeholder="Email" />
+  </div>
+
+  <div class="label-contraseña-login">
+    <i class="fa-solid fa-lock icono icono-contraseña-login"></i>
+    <input class="input-contraseña-login" type="password" placeholder="Contraseña" />
+  </div>
+
+  <div class="checkbox-login">
+    <input type="checkbox" />
+    Recordarme
+  </div>
+
+  <button type="submit" class="btn-ingresar-login">Ingresar</button>
+</form>
+
+      <p>o</p>
+      <button class="btn-recuperar-login" id="btnRecuperarContraseña">
+        Recuperar Contraseña
+      </button>
+    </div>
+
+    <div
+      class="contenedor-recuperar-login oculto"
+      id="contenedorRecuperarLogin"
+    >
+      <button class="btn-volver" id="btnVolver">
+        <i class="fas fa-arrow-left volver"></i>
+      </button>
+
+      <label class="label-icono-recuperar">
+        <i class="fa-solid fa-lock icono-recuperar"></i>
+      </label>
+
+      <div class="contenedor-recuperar-texto-login">
+        <h2 class="recuperar-texto-login">Recuperar</h2>
+        <h2 class="contraseña-texto-login">contraseña</h2>
+      </div>
+
+      <label class="label-mail-login">
+        <i class="fa-solid fa-envelope icono-email-recuperar-login"></i>
+        <input
+          class="input-mail-login"
+          type="text"
+          placeholder="Correo electronico"
+        />
+      </label>
+
+      <button class="btn-recuperar-login">Recuperar Contraseña</button>
+    </div>
+
+    <div class="modal-aviso oculto" id="modal-aviso">
+      <button class="btn-x" id="btn-x">X</button>
+      <p class="aviso">Usuario o contraseña incorrectos</p>
+    </div>
+
+    <div class="blackout oculto" id="blackout"></div>
+
+    <footer>
+      <i class="fa-solid fa-paw"></i>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planes</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/planes.css" />
+    <script type="module" src="js/compartido/tema.js"></script>
+    <script type="module" src="js/planes.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="cliente.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item" href="mascotas.html">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item" href="contratos.html">
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
+        <a class="nav-item" href="usuarios.html" data-rol="Administrador">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item" href="configuracion.html">
+          <i data-lucide="settings"></i>
+          Configuración
+          </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <div class="modal-overlay oculto" id="modal-confirmar-overlay">
+      <div class="modal-confirmar">
+        <div class="modal-confirmar-icono"><i data-lucide="trash-2"></i></div>
+        <p id="modal-confirmar-texto"></p>
+        <div class="modal-confirmar-botones">
+          <button id="modal-confirmar-cancelar" class="btn-outline">Cancelar</button>
+          <button id="modal-confirmar-aceptar" class="btn-peligro">Borrar</button>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section id="vista-planes">
+        <div class="encabezado-planes">
+          <div>
+            <h1>
+              <i data-lucide="shield-check"></i>
+              Planes
+            </h1>
+            <p>Gestiona los planes disponibles para tus mascotas</p>
+          </div>
+        </div>
+        <div class="planes-grid" id="planes-grid"></div>
+        <div class="acciones-planes">
+          <button id="btn-editar-planes" class="btn-outline"><i data-lucide="pencil"></i> Editar planes</button>
+          <button id="btn-crear-plan" class="btn-primario"><i data-lucide="plus"></i> Crear Plan</button>
+        </div>
+      </section>
+
+      <section id="vista-editar" class="oculto">
+        <div class="acciones-planes" style="margin-bottom:16px;">
+          <button id="btn-agregar-beneficio" class="btn-outline"><i data-lucide="plus"></i> Agregar beneficio</button>
+        </div>
+        <div class="tabla-editar-wrap">
+          <table id="tabla-editar">
+            <thead><tr id="tabla-editar-head"><th>Beneficios</th></tr></thead>
+            <tbody id="tabla-editar-body"></tbody>
+          </table>
+        </div>
+        <div class="acciones-planes">
+          <button id="btn-cancelar-editar" class="btn-outline">Cancelar</button>
+          <button id="btn-guardar-editar" class="btn-primario"><i data-lucide="save"></i> Guardar cambios</button>
+        </div>
+      </section>
+
+      <section id="vista-crear" class="oculto">
+        <button id="btn-volver-crear" class="btn-volver-planes"><i data-lucide="arrow-left"></i></button>
+        <h1>Crear Plan</h1>
+        <p>Agrega un nuevo plan y selecciona sus beneficios</p>
+        <div class="crear-plan-grid">
+          <div class="panel-crear">
+            <h3><i data-lucide="clipboard"></i> Información del plan</h3>
+            <label>Nombre del plan</label>
+            <input id="input-nombre-plan" type="text" placeholder="Ej: Senior, Premium, Básico">
+            <label>Costo del plan</label>
+            <input id="input-costo-plan" type="number" min="0" step="0.01" placeholder="Ej: 15000">
+            <label>Descripción (opcional)</label>
+            <textarea id="input-descripcion-plan" placeholder="Describe brevemente este plan..."></textarea>
+            <label>Ícono del plan</label>
+            <div class="selector-iconos" id="selector-iconos-plan"></div>
+          </div>
+          <div class="panel-crear">
+            <h3><i data-lucide="star"></i> Beneficios del plan</h3>
+            <div id="lista-beneficios-crear"></div>
+          </div>
+        </div>
+        <button id="btn-agregar-plan" class="btn-primario btn-ancho"><i data-lucide="plus"></i> Agregar Plan</button>
+      </section>
+    </main>
+
+<!-- no borrar -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VetCare - Dashboard</title>
+
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/compartido/tema.js"></script>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🐾</div>
+      <div class="brand-text">
+        <div class="name">VetCare</div>
+        <div class="tag">GESTIÓN VETERINARIA</div>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-item active">
+        <i data-lucide="house"></i>
+        Dashboard
+      </a>
+      <a href="cliente.html" class="nav-item">
+        <i data-lucide="users"></i>
+        Clientes
+      </a>
+      <a href="mascotas.html" class="nav-item">
+        <i data-lucide="paw-print" class="paw-icon"></i>
+        Mascotas
+      </a>
+      <a href="planes.html" class="nav-item">
+        <i data-lucide="shield-check"></i>
+        Planes
+      </a>
+      <a href="contratos.html" class="nav-item">
+        <i data-lucide="file-text"></i>
+        Contratos
+      </a>
+      <a href="usuarios.html" class="nav-item" data-rol="Administrador">
+        <i data-lucide="user-round"></i>
+        Usuarios
+      </a>
+      <a class="nav-item" href="configuracion.html">
+        <i data-lucide="settings"></i>
+        Configuración
+      </a>
+    </nav>
+
+    <a id="logoutBtn" class="logout">
+      <i data-lucide="log-out"></i>
+      Cerrar sesión
+    </a>
+  </aside>
+
+  <main class="main-content">
+    
+    <header class="topbar-container">
+      <div class="topbar-row">
+        <div class="user-greeting">
+          <div class="user-pill">
+            <div class="avatar"><i data-lucide="user-cog"></i></div>
+            <span>Hola <strong id="userNameDisplay"></strong></span>
+          </div>
+          <span class="badge-main"><i data-lucide="laptop"></i> MAIN</span>
+        </div>
+
+        <div class="date-card">
+          <i data-lucide="calendar"></i>
+          <div>
+            <small id="currentDateText"></small>
+            <strong id="currentTimeText"></strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-row">
+        <div class="search-box" id="searchBoxWrapper">
+          <i data-lucide="search"></i>
+          <input
+            type="text"
+            id="searchClientInput"
+            placeholder="Buscar cliente por nombre, apellido o DNI..."
+            autocomplete="off"
+          />
+          <div id="searchResults" class="search-results hidden"></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid-container">
+      
+      <div class="card action-card">
+        <div class="action-icon purple"><i data-lucide="user-plus"></i></div>
+        <div class="action-info">
+          <h4>Alta Afiliado</h4>
+          <p>Registrar un nuevo afiliado</p>
+        </div>
+        <button class="arrow-btn"><i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="card action-card">
+        <div class="action-icon soft-purple"><i data-lucide="file-text"></i></div>
+        <div class="action-info">
+          <h4>Resumen de cuentas</h4>
+          <p>Ver resumen completo de las cuentas</p>
+        </div>
+        <button class="arrow-btn"><i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="card hero-card">
+        <div class="hero-content">
+          <div class="action-icon purple"><i data-lucide="credit-card"></i></div>
+          <div class="hero-text">
+            <h3>Registrar Pagos</h3>
+            <p>Registrar un nuevo pago de afiliado</p>
+          </div>
+          <button class="arrow-btn"><i data-lucide="chevron-right"></i></button>
+        </div>
+        <div class="hero-graphic">
+          <i data-lucide="smartphone" class="posnet-icon"></i>
+          <i data-lucide="credit-card" class="card-icon-3d"></i>
+        </div>
+      </div>
+
+      <div class="card action-card">
+        <div class="action-icon purple"><i data-lucide="paw-print"></i></div>
+        <div class="action-info">
+          <h4>Alta mascota</h4>
+          <p>Registrar una nueva mascota</p>
+        </div>
+        <button class="arrow-btn"><i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="card action-card vencimientos-card" id="cardVencimientos">
+        <div class="action-icon soft-purple"><i data-lucide="calendar-clock"></i></div>
+        <div class="action-info">
+          <h4>Próximos Vencimientos</h4>
+          <p id="vencimientosResumen">Consultá los próximos vencimientos</p>
+        </div>
+        <button class="arrow-btn"><i data-lucide="chevron-right"></i></button>
+        <div class="vencimientos-list" id="vencimientosList"></div>
+      </div>
+
+      <div class="card stat-card">
+        <h4>Alta Afiliados</h4>
+        <div class="stat-icon"><i data-lucide="users"></i></div>
+        <div class="stat-number" id="totalAfiliadosCount"></div>
+        <small>afiliados registrados</small>
+      </div>
+
+      <div class="card stat-card">
+        <h4>Alta Mascotas</h4>
+        <div class="stat-icon"><i data-lucide="paw-print"></i></div>
+        <div class="stat-number" id="totalMascotasCount"></div>
+        <small>mascotas registradas</small>
+      </div>
+
+      <div class="card analytics-card">
+        <div class="analytics-tabs" id="analyticsTabs">
+          <button class="tab-btn active" data-rango="semanal">Semanal</button>
+          <button class="tab-btn" data-rango="mensual">Mensual</button>
+          <button class="tab-btn" data-rango="anual">Anual</button>
+        </div>
+        <div class="charts-wrapper">
+          <div class="chart-box bar-box">
+            <canvas id="mixedChart"></canvas>
+          </div>
+          <div class="chart-box donut-box">
+            <canvas id="donutChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+:root {
+    --purple-dark: #3d2a7d;
+    --purple-medium: #5b3fd6;
+    --purple-light: #6c4ee3;
+    --purple-pale: #F4F0FB;
+    --text-dark: #2E2A38;
+}
+
+*{
+    margin: 0;
+}
+
+body{
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(110deg, var(--purple-dark) 0%, var(--purple-pale) 25%);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.oculto { 
+    display: none; 
+}
+
+.logo{
+    width: 400px;
+    margin: 30px auto ;
+
+}
+
+.logotexto-login{
+    display: inline;
+    color: var(--purple-dark);
+}
+
+img{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.contenedor-login{
+    margin: 5px auto ;
+    width: 450px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0 3px 3px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    align-items: center;
+    text-align: center;
+    flex-direction: row;
+}
+
+.contenedor-iconologin-login{
+    align-items: center;
+    margin-top: 15px;
+    margin-right: 200px;
+}
+
+
+h2{
+    color: var(--text-dark);
+    margin-top: 10px;
+}
+
+span{
+    color: var(--purple-medium);
+    border-bottom: 2px solid var(--purple-medium);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 3px;
+}
+
+.input-login {
+    border: none;
+    outline: none;
+    background-color: var(--purple-pale);
+    color: var(--text-dark);
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 220px;
+    margin-top: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.input-contraseña-login{
+    border: none;
+    outline: none;
+    background-color: var(--purple-pale);
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 220px;
+    margin-top: 15px;
+    margin-left: -10px;
+    color: var(--text-dark);
+    font-family: 'Poppins', sans-serif;
+}
+
+.icono-usuario-login, .icono-contraseña-login{
+    color: var(--purple-medium);
+    padding: 5px;
+}
+
+.icono-usuario-login{
+    margin-left: 5px;
+    margin-top: 20px;
+}
+
+.icono-contraseña-login{
+    margin-left: -5px;
+    padding: 15px;
+}
+
+.checkbox-login{
+    margin-top: 10px;  
+    cursor: pointer;
+}
+
+
+.btn-ingresar-login,
+.btn-recuperar-login{
+    border: none;
+    outline: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding: 10px;
+    border-radius: 15px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-ingresar-login{
+    background: var(--purple-medium);
+    margin-top: 20px;
+}
+.btn-recuperar-login{
+    background: var(--purple-medium);
+}
+.btn-ingresar-login:hover,
+.btn-recuperar-login:hover {
+    background: var(--purple-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(61,42,125,0.25);
+}
+.btn-ingresar-login:active,
+.btn-recuperar-login:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+
+
+
+.btn-volver{
+    display:flex;
+    position: absolute;
+    width: 50px;
+    border: none;
+    outline: none;
+    background: var(--purple-medium);
+    border-radius: 10px;
+    transition: background 0.6s ease, background-color 0.6s ease;
+    margin-left: -80px;
+    margin-top: -30px;
+    cursor: pointer;
+}
+
+.btn-volver:hover{
+    background: var(--purple-dark);
+}
+
+.volver{
+    color: var(--purple-pale);
+    padding: 15px;
+}
+
+
+.label-icono-recuperar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 2px solid var(--purple-dark);
+    border-radius: 50%;
+    padding: 5px;
+    margin-top: -20px;
+    margin-left: 190px;
+}
+
+.icono-recuperar {
+    color:var(--purple-dark)
+}
+
+.recuperar-texto-login, .contraseña-texto-login{
+    font-size: 20px;
+    display:inline-flex;
+    margin-top: 70px;
+}
+
+.contraseña-texto-login{
+    color: var(--purple-dark);
+}
+
+.contenedor-recuperar-login {
+    margin: 5px auto ;
+    width: 450px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0 3px 3px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    align-items: center;
+    text-align: center;
+    flex-direction: row;
+    
+}
+
+
+.label-mail-login {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    margin-left: 20%;
+}
+
+.icono-email-recuperar-login {
+    margin-top: -30px;
+    margin-right: 10px;
+    color:var(--purple-dark)
+}
+
+
+.input-mail-login{
+    border: none;
+    outline: none;
+    background-color: var(--purple-pale);
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 220px;
+    color: var(--text-dark);
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 30px;
+}
+
+
+
+.modal-aviso {
+    position: absolute;
+  
+    width: 400px;
+    height: 150px;
+    border-radius: 15px;
+    color: black;
+    margin-left: 35%;
+    margin-top: 10%;
+    background-color: var(--purple-pale);
+    z-index: 5;
+}
+
+.btn-x{
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background: var(--purple-dark);
+    color: var(--purple-light);
+    transition: background 0.6s ease, background-color 0.6s ease;
+    cursor: pointer;
+}
+
+.btn-x:hover{
+    background: var(--purple-medium);
+}
+
+.aviso{
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.blackout{
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 3;
+}
+
+
+
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: var(--purple-dark);
+}
+
+footer i {
+    position: relative;
+    top: -30px;
+    font-size: 30px;
+    color: white;
+    background-color: var(--purple-dark);
+    border-radius: 5px;
+    padding: 15px;
+}

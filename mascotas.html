@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mascotas - VetCare</title>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/globals.css" />
+    <link rel="stylesheet" href="css/mascotas.css" />
+    <script type="module" src="js/compartido/tema.js"></script>
+    <script type="module" src="js/mascotas.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <div class="name">VetCare</div>
+          <div class="tag">GESTIÓN VETERINARIA</div>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="cliente.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a class="nav-item active">
+          <i data-lucide="paw-print" class="paw-icon"></i>
+          Mascotas
+        </a>
+        <a class="nav-item" href="planes.html">
+          <i data-lucide="shield-check"></i>
+          Planes
+        </a>
+        <a class="nav-item" href="contratos.html">
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
+        <a class="nav-item" href="usuarios.html" data-rol="Administrador">
+          <i data-lucide="user-round"></i>
+          Usuarios
+        </a>
+        <a class="nav-item" href="configuracion.html">
+          <i data-lucide="settings"></i>
+          Configuración
+        </a>
+      </nav>
+
+      <a id="logoutBtn" class="logout">
+        <i data-lucide="log-out"></i>
+        Cerrar sesión
+      </a>
+    </aside>
+
+    <main>
+      <section id="vistaLista" class="vista-lista">
+        <div class="page-header">
+          <div class="ctn-seccion">
+            <div class="ctn-icon-seccion">
+              <i data-lucide="paw-print" class="icon-users-seccion paw-icon"></i>
+            </div>
+            <div>
+              <h1>Mascotas</h1>
+              <p>Gestión de pacientes veterinarios</p>
+            </div>
+          </div>
+          <button class="btn-alta" id="btnAltaMascota" data-rol="Administrador,Recepcionista">
+            <i data-lucide="plus"></i>
+            Alta Mascota
+          </button>
+        </div>
+
+        <div class="toolbar-filtros">
+          <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="text" id="inputBuscador" placeholder="Buscar por nombre, DNI, especie, raza u observaciones..." />
+          </div>
+
+          <div class="filtros-row">
+            <div class="filtro-group">
+              <label for="filtroEstado"><i data-lucide="circle-dot"></i> Estado</label>
+              <select id="filtroEstado">
+                <option value="">Todos</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+
+            <div class="filtro-group">
+              <label for="filtroPesoDesde"><i data-lucide="weight"></i> Peso desde (kg)</label>
+              <input type="number" id="filtroPesoDesde" placeholder="0" min="0" step="0.1" />
+            </div>
+
+            <div class="filtro-group">
+              <label for="filtroPesoHasta"><i data-lucide="weight"></i> Peso hasta (kg)</label>
+              <input type="number" id="filtroPesoHasta" placeholder="100" min="0" step="0.1" />
+            </div>
+
+            <button class="btn-limpiar-filtros" id="btnLimpiarFiltros" title="Limpiar filtros">
+              <i data-lucide="x"></i>
+              Limpiar
+            </button>
+          </div>
+
+          <div class="contador-resultados" id="contadorResultados"></div>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Sexo</th>
+                <th>Fecha Nac.</th>
+                <th>Color</th>
+                <th>Peso (kg)</th>
+                <th>Plan</th>
+                <th>Observaciones</th>
+                <th>DNI Cliente</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="mascotas-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="vistaEditar" class="vista-editar" style="display: none">
+        <div class="alta-header">
+          <button class="btn-back" id="btnVolver"><i data-lucide="arrow-left"></i></button>
+          <div class="alta-header-titulo">
+            <h1 id="tituloFormulario">Alta Mascota</h1>
+            <p id="subtituloFormulario">Registrar una nueva mascota</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-decoration">
+            <i data-lucide="paw-print" class="form-decoration-icon paw-icon"></i>
+          </div>
+
+          <form id="formMascota">
+            <div class="form-right">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="nombre">Nombre *</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="paw-print"></i></div>
+                    <input type="text" id="nombre" placeholder="Ingrese nombre" required />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="especie">Especie *</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="tag"></i></div>
+                    <select id="especie" required>
+                      <option value="">Seleccionar especie</option>
+                      <option value="Perro">Perro</option>
+                      <option value="Gato">Gato</option>
+                      <option value="Ave">Ave</option>
+                      <option value="Roedor">Roedor</option>
+                      <option value="Reptil">Reptil</option>
+                      <option value="Otro">Otro</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="raza">Raza</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="bookmark"></i></div>
+                    <input type="text" id="raza" placeholder="Ingrese raza" />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label>Sexo *</label>
+                  <div class="sexo-group">
+                    <label class="sexo-option"><input type="radio" name="sexo" value="Macho" /><span>Macho</span></label>
+                    <label class="sexo-option"><input type="radio" name="sexo" value="Hembra" /><span>Hembra</span></label>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="calendar"></i></div>
+                    <input type="date" id="fechaNacimiento" required />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="peso">Peso (kg)</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="weight"></i></div>
+                    <input type="number" id="peso" placeholder="Ingrese peso" step="0.1" min="0" />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="color">Color</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="palette"></i></div>
+                    <input type="text" id="color" placeholder="Ingrese color" />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="dniCliente">DNI del Dueño *</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="user"></i></div>
+                    <input type="text" id="dniCliente" placeholder="DNI del dueño" required />
+                  </div>
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="observaciones">Observaciones</label>
+                  <div class="input-wrap">
+                    <div class="input-icon"><i data-lucide="file-text"></i></div>
+                    <textarea id="observaciones" placeholder="Ingrese observaciones..." rows="2"></textarea>
+                  </div>
+                </div>
+
+                <input type="hidden" id="mascotaId" value="" />
+              </div>
+
+              <div class="form-footer">
+                <button type="submit" class="btn-confirmar">
+                  <i data-lucide="check"></i>
+                  <span id="btnConfirmarTexto">Confirmar</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <div id="confirm-overlay" class="overlay hidden">
+      <div class="modal">
+        <h3>Confirmar eliminación</h3>
+        <p id="confirm-text">¿Seguro que querés eliminar esta mascota? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="confirm-cancel">Cancelar</button>
+          <button class="btn-danger" id="confirm-delete">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
