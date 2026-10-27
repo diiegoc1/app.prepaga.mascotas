@@ -14,21 +14,25 @@
       rel="stylesheet"
     />
     <script>
-  (function() {
-    var t = localStorage.getItem('vetcare_tema');
-    if (t !== 'light' && t !== 'dark') {
-      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    document.documentElement.setAttribute('data-theme', t);
-  })();
-</script>
+      (function () {
+        var t = localStorage.getItem("vetcare_tema");
+        if (t !== "light" && t !== "dark") {
+          t =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
     <script type="module" src="js/compartido/tema.js"></script>
     <script type="module" src="js/login.js"></script>
     <title>Login</title>
   </head>
   <body>
     <div class="logo">
-      <img class="logotipo" src="/img/icono.png" alt="" />
+      <!-- <img class="logotipo" src="/img/icono.png" alt="" /> -->
       <h1 class="logotexto-login">Tolkeyén</h1>
     </div>
 
@@ -39,24 +43,43 @@
       </div>
       <h2>Bienvenido al Portal de Gestión</h2>
 
-      <form id="loginForm" onsubmit="event.preventDefault();">
-  <div class="label-usuario-login">
-    <i class="fa-solid fa-user icono-usuario-login"></i>
-    <input class="input-login" type="email" placeholder="Email" />
-  </div>
+      <form id="loginForm" onsubmit="event.preventDefault()">
+        <div class="label-usuario-login">
+          <i class="fa-solid fa-user icono-usuario-login"></i>
+          <input class="input-login" type="email" placeholder="Email" required/>
+        </div>
 
-  <div class="label-contraseña-login">
-    <i class="fa-solid fa-lock icono icono-contraseña-login"></i>
-    <input class="input-contraseña-login" type="password" placeholder="Contraseña" />
-  </div>
+        <div class="label-contraseña-login">
+          <i class="fa-solid fa-lock icono icono-contraseña-login"></i>
+          <input
+            class="input-contraseña-login"
+            type="password"
+            placeholder="Contraseña"
+            required
+          />
+        </div>
 
-  <div class="checkbox-login">
-    <input type="checkbox" />
-    Recordarme
-  </div>
+        <div class="checkbox-wrapper-4 checkbox-login">
+          <input class="inp-cbx" id="morning" type="checkbox" />
+          <label class="cbx" for="morning"
+            ><span>
+              <svg width="12px" height="10px">
+                <use xlink:href="#check-4"></use></svg></span
+            ><span>Recordarme</span></label
+          >
+          <svg class="inline-svg">
+            <symbol id="check-4" viewbox="0 0 12 10">
+              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+            </symbol>
+          </svg>
+        </div>
+<!--         <div class="checkbox-login">
+          <input type="checkbox" />
+          Recordarme
+        </div> -->
 
-  <button type="submit" class="btn-ingresar-login">Ingresar</button>
-</form>
+        <button type="submit" class="btn-ingresar-login">Ingresar</button>
+      </form>
 
       <p>o</p>
       <button class="btn-recuperar-login" id="btnRecuperarContraseña">
@@ -81,21 +104,29 @@
         <h2 class="contraseña-texto-login">contraseña</h2>
       </div>
 
+      <p class="texto-ayuda-recuperar">
+        Ingresá tu correo y te enviaremos un enlace para crear una nueva
+        contraseña.
+      </p>
+
       <label class="label-mail-login">
         <i class="fa-solid fa-envelope icono-email-recuperar-login"></i>
         <input
           class="input-mail-login"
-          type="text"
+          id="inputMailRecuperar"
+          type="email"
           placeholder="Correo electronico"
         />
       </label>
 
-      <button class="btn-recuperar-login">Recuperar Contraseña</button>
+      <button class="btn-recuperar-login" id="btnEnviarRecuperar">
+        Enviar enlace
+      </button>
     </div>
 
     <div class="modal-aviso oculto" id="modal-aviso">
       <button class="btn-x" id="btn-x">X</button>
-      <p class="aviso">Usuario o contraseña incorrectos</p>
+      <p class="aviso" id="textoAviso">Usuario o contraseña incorrectos</p>
     </div>
 
     <div class="blackout oculto" id="blackout"></div>
@@ -103,6 +134,5 @@
     <footer>
       <i class="fa-solid fa-paw"></i>
     </footer>
-
   </body>
 </html>

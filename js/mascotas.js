@@ -40,12 +40,6 @@ function validarDni(dni) {
   return /^\d{7,8}$/.test(dni);
 }
 
-function validarFechaNacimiento(fecha) {
-  const hoy = new Date();
-  const fechaNac = new Date(fecha);
-  return fechaNac < hoy;
-}
-
 function formatearFecha(fecha) {
   if (!fecha) return '';
   const d = new Date(fecha + 'T00:00:00');
@@ -119,7 +113,7 @@ async function guardarMascotaEnSupabase(datos) {
     especie: datos.especie,
     raza: datos.raza || null,
     sexo: datos.sexo,
-    fecha_nacimiento: datos.fecha_nacimiento,
+    fecha_nacimiento: datos.fecha_nacimiento || null,
     color: datos.color || null,
     peso: datos.peso ? parseFloat(datos.peso) : null,
     observaciones: datos.observaciones || null,
@@ -305,6 +299,7 @@ function mostrarEditar(mascota = null) {
   if (vistaEditar) vistaEditar.style.display = 'block';
 
   if (formMascota) formMascota.reset();
+  limpiarErrores();
   const mascotaIdInput = document.getElementById('mascotaId');
   if (mascotaIdInput) mascotaIdInput.value = '';
   idMascotaEditando = null;
@@ -336,17 +331,46 @@ function mostrarEditar(mascota = null) {
 // ============================================
 // VALIDACIONES
 // ============================================
-function validarFormulario(datos) {
-  if (!datos.nombre_mascota.trim()) { alert('El nombre es obligatorio'); return false; }
-  if (!datos.especie) { alert('La especie es obligatoria'); return false; }
-  if (!datos.sexo) { alert('El sexo es obligatorio'); return false; }
-  if (!datos.fecha_nacimiento) { alert('La fecha de nacimiento es obligatoria'); return false; }
-  if (!datos.dni.trim()) { alert('El DNI del dueño es obligatorio'); return false; }
-  if (!validarFechaNacimiento(datos.fecha_nacimiento)) { alert('La fecha no puede ser futura'); return false; }
-  if (!validarDni(datos.dni.trim())) { alert('El DNI debe tener 7 u 8 dígitos'); return false; }
-  if (datos.peso && parseFloat(datos.peso) < 0) { alert('El peso debe ser positivo'); return false; }
-  return true;
+function limpiarErrores() {
+  document.querySelectorAll('.field-error').forEach((el) => (el.textContent = ''));
 }
+
+function mostrarError(campo, msg) {
+  const el = document.getElementById(`error-${campo}`);
+  if (el) el.textContent = msg || '';
+}
+
+function validarFormulario(datos) {
+  limpiarErrores();
+  let ok = true;
+  const set = (campo, msg) => {
+    if (msg) {
+      mostrarError(campo, msg);
+      ok = false;
+    }
+  };
+
+  if (!datos.nombre_mascota) set('nombre', 'El nombre es obligatorio');
+  if (!datos.especie) set('especie', 'La especie es obligatoria');
+  if (!datos.sexo) set('sexo', 'El sexo es obligatorio');
+  if (!datos.dni) set('dniCliente', 'El DNI del dueño es obligatorio');
+  else if (!validarDni(datos.dni)) set('dniCliente', 'El DNI debe tener 7 u 8 dígitos');
+  if (datos.peso && parseFloat(datos.peso) < 0) set('peso', 'El peso debe ser positivo');
+
+  return ok;
+}
+
+// Limpiar el error de un campo cuando se corrige
+[['nombre', 'nombre'], ['raza', null], ['peso', 'peso'], ['color', null], ['dniCliente', 'dniCliente']].forEach(([id, campo]) => {
+  if (!campo) return;
+  document.getElementById(id)?.addEventListener('input', () => mostrarError(campo, ''));
+});
+
+document.getElementById('especie')?.addEventListener('change', () => mostrarError('especie', ''));
+
+document.querySelectorAll('input[name="sexo"]').forEach((radio) => {
+  radio.addEventListener('change', () => mostrarError('sexo', ''));
+});
 
 // ============================================
 // EVENTOS
@@ -475,10 +499,10 @@ if (formMascota) {
       const { data: clienteExiste, error: clienteError } = await supabase
         .from('clientes').select('dni').eq('dni', datos.dni).single();
       if (clienteError || !clienteExiste) {
-        alert('El DNI del dueño no existe. Registrá primero al cliente.');
+        mostrarError('dniCliente', 'El DNI del dueño no existe. Registrá primero al cliente.');
         return;
       }
-    } catch (err) { alert('Error al verificar DNI: ' + err.message); return; }
+    } catch (err) { mostrarError('dniCliente', 'Error al verificar el DNI: ' + err.message); return; }
 
     const btn = formMascota.querySelector('.btn-confirmar');
     const textoOriginal = btn ? btn.innerHTML : '';

@@ -17,6 +17,7 @@ export default defineConfig({
         contratos: resolve(__dirname, "contratos.html"),
         usuarios: resolve(__dirname, "usuarios.html"),
         configuracion: resolve(__dirname, "configuracion.html"),
+        restablecer: resolve(__dirname, "restablecer.html"),
       },
     },
   },

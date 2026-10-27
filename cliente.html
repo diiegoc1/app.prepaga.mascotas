@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/cliente.css" />
     <script type="module" src="js/compartido/tema.js"></script>
     <script type="module" src="js/cliente.js"></script>
-
   </head>
   <body>
     <aside class="sidebar">
@@ -40,9 +39,9 @@
           Planes
         </a>
         <a class="nav-item" href="contratos.html">
-        <i data-lucide="file-text"></i>
-        Contratos
-      </a>
+          <i data-lucide="file-text"></i>
+          Contratos
+        </a>
         <a class="nav-item" href="usuarios.html" data-rol="Administrador">
           <i data-lucide="user-round"></i>
           Usuarios
@@ -126,7 +125,11 @@
             <input type="date" id="filtroFechaHasta" />
           </div>
 
-          <button class="btn-limpiar-filtros" id="btnLimpiarFiltros" title="Limpiar filtros">
+          <button
+            class="btn-limpiar-filtros"
+            id="btnLimpiarFiltros"
+            title="Limpiar filtros"
+          >
             <i data-lucide="x"></i>
             Limpiar
           </button>
@@ -173,6 +176,12 @@
         </div>
 
         <div class="form-card">
+          <div class="form-decoration">
+            <i
+              data-lucide="paw-print"
+              class="form-decoration-icon paw-icon"
+            ></i>
+          </div>
           <form id="formAfiliado" class="form-right">
             <div class="form-grid">
               <div class="form-field" data-field="dni">
@@ -479,7 +488,7 @@
                 <th>ESPECIE</th>
                 <th>RAZA</th>
                 <th>OBSERVACIONES</th>
-                <th>PLANES</th>
+                
               </tr>
             </thead>
             <tbody id="mascotas-body">

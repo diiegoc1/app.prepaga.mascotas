@@ -675,6 +675,26 @@ tbody tr:hover {
   margin-bottom: 6px;
 }
 
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.field-header label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+.field-error {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--red-fg);
+  min-height: 14px;
+  text-align: right;
+}
+
 .form-field.full-width {
   grid-column: span 2;
 }
